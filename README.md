@@ -39,3 +39,7 @@ User Stories
     ● As a beachgoer, I want a web app that provides me with weather updates and notifications specific to my preferred beach locations. This will allow me to plan my beach outings, check for ideal weather conditions, and stay informed about any potential risks such as high tides or storms
 
     ● As a outdoor event organizer, I want a weather app that provides me with the acurate and real-time weather update for my event locations. This will enable me to make informed decisions about event setup, equipment, and safety measures, ensuring a smooth and enjoyable experience for attendees.
+    Wireframe
+![homepage](https://github.com/YvonneAriri/site-week2-project2-student-store-starter/assets/102451432/d0f24c65-3a3a-482d-aa35-0e50b80e6a82)
+![login](https://github.com/YvonneAriri/site-week2-project2-student-store-starter/assets/102451432/02a545ac-1c74-4c2b-8fc1-473a40f244f7)
+![popup](https://github.com/YvonneAriri/site-week2-project2-student-store-starter/assets/102451432/3e2d4783-79a4-4dd2-939f-e8e63e7afbf9)
