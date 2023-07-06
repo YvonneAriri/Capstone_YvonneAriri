@@ -1,0 +1,82 @@
+[
+  {
+    "name": "John Doe",
+    "username": "johndoe",
+    "password": "pass123",
+    "email": "johndoe@example.com",
+    "profilePicture": "profile1.jpg",
+    "Tel": "1234567890"
+  },
+  {
+    "name": "Jane Smith",
+    "username": "janesmith",
+    "password": "password456",
+    "email": "janesmith@example.com",
+    "profilePicture": "profile2.jpg",
+    "Tel": "2345678901"
+  },
+  {
+    "name": "Michael Johnson",
+    "username": "michaelj",
+    "password": "news1234",
+    "email": "michaelj@example.com",
+    "profilePicture": "profile3.jpg",
+    "Tel": "3456789012"
+  },
+  {
+    "name": "Emily Davis",
+    "username": "emilyd",
+    "password": "abc123",
+    "email": "emilyd@example.com",
+    "profilePicture": "profile4.jpg",
+    "Tel": "4567890123"
+  },
+  {
+    "name": "David Wilson",
+    "username": "davidw",
+    "password": "123pass",
+    "email": "davidw@example.com",
+    "profilePicture": "profile5.jpg",
+    "Tel": "5678901234"
+  },
+  {
+    "name": "Sarah Anderson",
+    "username": "sarahand",
+    "password": "watch789",
+    "email": "sarahand@example.com",
+    "profilePicture": "profile6.jpg",
+    "Tel": "6789012345"
+  },
+  {
+    "name": "Robert Taylor",
+    "username": "robertt",
+    "password": "insider789",
+    "email": "robertt@example.com",
+    "profilePicture": "profile7.jpg",
+    "Tel": "7890123456"
+  },
+  {
+    "name": "Olivia Thomas",
+    "username": "oliviat",
+    "password": "tech123",
+    "email": "oliviat@example.com",
+    "profilePicture": "profile8.jpg",
+    "Tel": "8901234567"
+  },
+  {
+    "name": "Ava Martinez",
+    "username": "avam",
+    "password": "blog456",
+    "email": "avam@example.com",
+    "profilePicture": "profile9.jpg",
+    "Tel": "9012345678"
+  },
+  {
+    "name": "Noah Rodriguez",
+    "username": "noahr",
+    "password": "fanatic123",
+    "email": "noahr@example.com",
+    "profilePicture": "profile10.jpg",
+    "Tel": "0123456789"
+  }
+]

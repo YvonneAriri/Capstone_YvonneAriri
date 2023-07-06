@@ -1,0 +1,82 @@
+[
+  {
+    "eventName": "Conference",
+    "description": "Annual technology conference",
+    "location": "Convention Center",
+    "startTime": "2023-08-15T09:00:00",
+    "endTime": "2023-08-17T18:00:00",
+    "username": "tech_conference_org"
+  },
+  {
+    "eventName": "Music Festival",
+    "description": "Three-day outdoor music festival",
+    "location": "Park Stadium",
+    "startTime": "2023-07-21T15:00:00",
+    "endTime": "2023-07-23T23:00:00",
+    "username": "music_festivals_inc"
+  },
+  {
+    "eventName": "Charity Gala",
+    "description": "Fundraising gala for a local charity",
+    "location": "Grand Ballroom",
+    "startTime": "2023-09-10T19:30:00",
+    "endTime": "2023-09-10T23:00:00",
+    "username": "charity_org"
+  },
+  {
+    "eventName": "Art Exhibition",
+    "description": "Showcasing contemporary artworks",
+    "location": "Art Gallery",
+    "startTime": "2023-08-05T10:00:00",
+    "endTime": "2023-08-30T17:00:00",
+    "username": "art_gallery"
+  },
+  {
+    "eventName": "Sports Tournament",
+    "description": "Annual basketball tournament",
+    "location": "Sports Complex",
+    "startTime": "2023-07-12T13:00:00",
+    "endTime": "2023-07-16T19:00:00",
+    "username": "sports_association"
+  },
+  {
+    "eventName": "Product Launch",
+    "description": "Introducing our latest product lineup",
+    "location": "Convention Hall",
+    "startTime": "2023-09-25T10:00:00",
+    "endTime": "2023-09-25T14:00:00",
+    "username": "product_company"
+  },
+  {
+    "eventName": "Food Festival",
+    "description": "A celebration of culinary delights",
+    "location": "Downtown Square",
+    "startTime": "2023-08-18T16:00:00",
+    "endTime": "2023-08-20T22:00:00",
+    "username": "food_festival_org"
+  },
+  {
+    "eventName": "Movie Night",
+    "description": "An outdoor cinema experience",
+    "location": "Park Amphitheater",
+    "startTime": "2023-07-28T20:00:00",
+    "endTime": "2023-07-28T23:00:00",
+    "username": "movie_enthusiast"
+  },
+  {
+    "eventName": "Fashion Show",
+    "description": "Unveiling the latest fashion trends",
+    "location": "Fashion Center",
+    "startTime": "2023-09-07T18:30:00",
+    "endTime": "2023-09-07T21:00:00",
+    "username": "fashion_agency"
+  },
+  {
+    "eventName": "Book Signing",
+    "description": "Meet the renowned author and get your book signed",
+    "location": "Bookstore",
+    "startTime": "2023-08-10T17:00:00",
+    "endTime": "2023-07-16T19:00:00",
+    "username": "book_agency"
+  }
+]
