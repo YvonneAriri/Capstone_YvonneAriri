@@ -1,25 +1,40 @@
 /* eslint-disable no-unused-vars */
 import "./SignUpForm.css";
+import axios from "axios";
 import React, { useState } from "react";
 
 export default function SignUpForm() {
-  const [name, setName] = useState("");
+  const [fullname, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
+
+  const register = () => {
+    axios
+      .post(`http://localhost:3000/signUp`, {
+        fullname: fullname,
+        username: username,
+        password: password,
+        email: email,
+        tel: tel,
+      })
+      .then((response) => {
+        console.log("!!!", response);
+      });
+  };
 
   return (
     <div className="signup-form">
       <form>
         <h2>SignUp</h2>
         <div>
-          <label>Name:</label>
+          <label>fullname:</label>
           <input
             type="text"
-            id="name"
+            id="fullname"
             onChange={(e) => {
-              setName(e.target.value);
+              setFullName(e.target.value);
             }}
           />
         </div>
@@ -58,7 +73,7 @@ export default function SignUpForm() {
             <label>Tel:</label>
             <input
               type="text"
-              id="tel"
+              id="Tel"
               onChange={(e) => {
                 setTel(e.target.value);
               }}
@@ -66,7 +81,7 @@ export default function SignUpForm() {
           </div>
         </div>
         <div>
-          <button>SignUp</button>
+          <button onClick={register}>SignUp</button>
         </div>
       </form>
     </div>
