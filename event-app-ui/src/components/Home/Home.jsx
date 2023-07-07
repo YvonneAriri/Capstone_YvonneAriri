@@ -1,8 +1,5 @@
-// import { useState } from "react";
-
-import "./App.css";
-
-function App() {
+import "./Home.css";
+export default function Home() {
   return (
     <div>
       <button>Log In</button>
@@ -10,5 +7,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
