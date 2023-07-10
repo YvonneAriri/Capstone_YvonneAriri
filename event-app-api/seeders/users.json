@@ -1,82 +1,90 @@
 [
   {
-    "name": "John Doe",
-    "username": "johndoe",
+    "fullname": "John Doe",
+    "username": "je",
     "password": "pass123",
     "email": "johndoe@example.com",
     "profilePicture": "profile1.jpg",
-    "Tel": "1234567890"
+    "tel": "1234567890"
   },
   {
-    "name": "Jane Smith",
-    "username": "janesmith",
+    "fullname": "Jane Smith",
+    "username": "jath",
     "password": "password456",
     "email": "janesmith@example.com",
     "profilePicture": "profile2.jpg",
-    "Tel": "2345678901"
+    "tel": "2345678901"
   },
   {
-    "name": "Michael Johnson",
-    "username": "michaelj",
+    "fullname": "Michael Johnson",
+    "username": "malj",
     "password": "news1234",
     "email": "michaelj@example.com",
     "profilePicture": "profile3.jpg",
-    "Tel": "3456789012"
+    "tel": "3456789012"
   },
   {
-    "name": "Emily Davis",
-    "username": "emilyd",
+    "fullname": "Emily Davis",
+    "username": "ed",
     "password": "abc123",
     "email": "emilyd@example.com",
     "profilePicture": "profile4.jpg",
-    "Tel": "4567890123"
+    "tel": "4567890123"
   },
   {
-    "name": "David Wilson",
-    "username": "davidw",
+    "fullname": "David Wilson",
+    "username": "dw",
     "password": "123pass",
     "email": "davidw@example.com",
     "profilePicture": "profile5.jpg",
-    "Tel": "5678901234"
+    "tel": "5678901234"
   },
   {
-    "name": "Sarah Anderson",
-    "username": "sarahand",
+    "fullname": "Sarah Anderson",
+    "username": "sand",
     "password": "watch789",
     "email": "sarahand@example.com",
     "profilePicture": "profile6.jpg",
-    "Tel": "6789012345"
+    "tel": "6789012345"
   },
   {
-    "name": "Robert Taylor",
-    "username": "robertt",
+    "fullname": "Robert Taylor",
+    "username": "rot",
     "password": "insider789",
     "email": "robertt@example.com",
     "profilePicture": "profile7.jpg",
-    "Tel": "7890123456"
+    "tel": "7890123456"
   },
   {
-    "name": "Olivia Thomas",
-    "username": "oliviat",
+    "fullname": "Olivia Thomas",
+    "username": "oit",
     "password": "tech123",
     "email": "oliviat@example.com",
     "profilePicture": "profile8.jpg",
-    "Tel": "8901234567"
+    "tel": "8901234567"
   },
   {
-    "name": "Ava Martinez",
-    "username": "avam",
+    "fullname": "Ava Martinez",
+    "username": "a",
     "password": "blog456",
     "email": "avam@example.com",
     "profilePicture": "profile9.jpg",
-    "Tel": "9012345678"
+    "tel": "9012345678"
   },
   {
-    "name": "Noah Rodriguez",
-    "username": "noahr",
+    "fullname": "Noah Rodriguez",
+    "username": "n",
     "password": "fanatic123",
     "email": "noahr@example.com",
     "profilePicture": "profile10.jpg",
-    "Tel": "0123456789"
+    "tel": "0123456789"
+  },
+  {
+    "fullname": "No Rodrgez",
+    "username": "na",
+    "password": "fanic123",
+    "email": "noahr@example.com",
+    "profilePicture": "profile13.jpg",
+    "tel": "0123456789"
   }
 ]

@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database.js";
 
 export const User = sequelize.define("User", {
-  name: {
+  fullname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -23,7 +23,7 @@ export const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  Tel: {
+  tel: {
     type: DataTypes.STRING,
     allowNull: false,
   },
