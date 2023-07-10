@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
-import "./LoginForm.css";
+import "components/Login/LoginForm.css";
 import axios from "axios";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
@@ -21,31 +22,41 @@ export default function LoginForm() {
 
   return (
     <div className="Login">
-      <form>
-        <h2>LogIn</h2>
-        <div>
-          <label>Username:</label>
+      <form action="#" className="form-button">
+        <h2>Login</h2>
+
+        <div className="input-box">
           <input
             type="text"
             id="username"
             onChange={(e) => {
               setUsername(e.target.value);
             }}
+            placeholder="Username"
           />
         </div>
 
-        <div>
-          <label>Password</label>
+        <div className="input-box">
           <input
             type="password"
             id="password"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            placeholder="Password"
+            required
           />
         </div>
         <div>
-          <button onClick={logIn}>Login</button>
+          <button className="btn" onClick={logIn}>
+            Login
+          </button>
+          <p>
+            Don&apos;t have an account?{" "}
+            <Link to="/signup">
+              <a href="">signUp</a>
+            </Link>
+          </p>
         </div>
       </form>
     </div>
