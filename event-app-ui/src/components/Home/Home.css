@@ -1,0 +1,31 @@
+.home {
+  align-items: end;
+}
+.login-btn {
+  border-color: white;
+  height: 50px;
+  background-color: transparent;
+  width: 70px;
+  color: white;
+  font-weight: bold;
+  background-color: black;
+  opacity: 0.7;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.signup-btn {
+  border-color: white;
+  height: 50px;
+  background-color: transparent;
+  width: 70px;
+  color: white;
+  background-color: black;
+  opacity: 0.7;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn {
+  display: flex;
+  justify-content: flex-end;
+}
