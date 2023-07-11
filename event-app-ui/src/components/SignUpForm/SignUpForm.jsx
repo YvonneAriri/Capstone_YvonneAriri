@@ -9,6 +9,7 @@ export default function SignUpForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
+  const [error, setError] = useState(false);
 
   const register = () => {
     axios
@@ -23,10 +24,22 @@ export default function SignUpForm() {
         console.log("!!!", response);
       });
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      fullname.length == 0 ||
+      username.length == 0 ||
+      password.length == 0 ||
+      email.length == 0 ||
+      tel.length == 0
+    ) {
+      setError(true);
+    }
+  };
 
   return (
     <div className="signup-form">
-      <form action="#" className="form-button">
+      <form action="#" className="form-button" onSubmit={handleSubmit}>
         <h2>SignUp</h2>
         <div className="input-box">
           <input
@@ -38,7 +51,11 @@ export default function SignUpForm() {
             placeholder="Fullname"
           />
         </div>
-
+        {error && fullname.length <= 0 ? (
+          <label>fullname cannot be empty</label>
+        ) : (
+          ""
+        )}
         <div className="input-box">
           <input
             type="text"
@@ -49,7 +66,11 @@ export default function SignUpForm() {
             placeholder="Username"
           />
         </div>
-
+        {error && username.length <= 0 ? (
+          <label>username cannot be empty</label>
+        ) : (
+          ""
+        )}
         <div className="input-box">
           <input
             type="password"
@@ -60,6 +81,11 @@ export default function SignUpForm() {
             placeholder="Password"
           />
         </div>
+        {error && password.length <= 0 ? (
+          <label>password cannot be empty</label>
+        ) : (
+          ""
+        )}
         <div className="input-box">
           <input
             type="email"
@@ -70,21 +96,27 @@ export default function SignUpForm() {
             placeholder="Email"
           />
         </div>
+        {error && email.length <= 0 ? <label>email cannot be empty</label> : ""}
         <div className="input-box">
           <input
-            type="text"
+            type="tel"
             id="Tel"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             onChange={(e) => {
               setTel(e.target.value);
             }}
             placeholder="Tel"
           />
         </div>
+        {error && tel.length <= 0 ? <label>tel cannot be empty</label> : ""}
 
         <div>
           <button className="btn" onClick={register}>
             SignUp
           </button>
+          <p>
+            Already have an account<a href="">login</a>
+          </p>
         </div>
       </form>
     </div>
