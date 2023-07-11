@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import "./SignUpForm.css";
+import "components/SignUpForm/SignUpForm.css";
 import axios from "axios";
 import React, { useState } from "react";
 
@@ -26,62 +26,65 @@ export default function SignUpForm() {
 
   return (
     <div className="signup-form">
-      <form>
+      <form action="#" className="form-button">
         <h2>SignUp</h2>
-        <div>
-          <label>fullname:</label>
+        <div className="input-box">
           <input
             type="text"
             id="fullname"
             onChange={(e) => {
               setFullName(e.target.value);
             }}
+            placeholder="Fullname"
           />
         </div>
 
-        <div>
-          <label>Username:</label>
+        <div className="input-box">
           <input
             type="text"
             id="username"
             onChange={(e) => {
               setUsername(e.target.value);
             }}
+            placeholder="Username"
           />
         </div>
 
-        <div>
-          <label>Password:</label>
+        <div className="input-box">
           <input
             type="password"
             id="password"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            placeholder="Password"
           />
-          <div>
-            <label>Email:</label>
-            <input
-              type="text"
-              id="email"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-          </div>
-          <div>
-            <label>Tel:</label>
-            <input
-              type="text"
-              id="Tel"
-              onChange={(e) => {
-                setTel(e.target.value);
-              }}
-            />
-          </div>
         </div>
+        <div className="input-box">
+          <input
+            type="email"
+            id="email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            placeholder="Email"
+          />
+        </div>
+        <div className="input-box">
+          <input
+            type="text"
+            id="Tel"
+            onChange={(e) => {
+              setTel(e.target.value);
+            }}
+            placeholder="Tel"
+          />
+        </div>
+
         <div>
-          <button onClick={register}>SignUp</button>
+          <button className="btn" onClick={register}>
+            SignUp
+          </button>
         </div>
       </form>
     </div>

@@ -1,9 +1,10 @@
-import "./Home.css";
+import "components/Home/Home.css";
+import Navbar from "components/Navbar/Navbar";
+
 export default function Home() {
   return (
-    <div>
-      <button>Log In</button>
-      <button>Sign Up</button>
+    <div className="home">
+      <Navbar />
     </div>
   );
 }

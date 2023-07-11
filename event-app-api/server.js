@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import morgan from "morgan";
 import { sequelize } from "./database.js";
 import { User, Event } from "./models/index.js";
 
@@ -12,14 +11,12 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-app.post("/signUp", (req, res) => {
+app.post("/signup", (req, res) => {
   const fullname = req.body.fullname;
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
   const tel = req.body.tel;
-
-  console.log("!!!", req);
 
   sequelize.query(
     `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${password}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
@@ -28,6 +25,22 @@ app.post("/signUp", (req, res) => {
       console.log(err);
     }
   );
+});
+
+app.post("/login", async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  const [result, metadata] = await sequelize.query(
+    `SELECT * FROM "public"."Users" WHERE username = '${username}' and password = '${password}'`,
+    { type: sequelize.QueryTypes.SELECT }
+  );
+  if (result) {
+    res.send(result);
+  } else {
+    res.send({ message: "Wrong username and wrong password" });
+  }
+  console.log(result);
 });
 
 app.get("/users", async (req, res) => {
