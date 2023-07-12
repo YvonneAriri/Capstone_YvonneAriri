@@ -8,6 +8,8 @@ export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // includes cookies and and authentication headers in cross-origin request
+  axios.defaults.withCredentials = true;
   const logIn = (e) => {
     e.preventDefault();
     axios
