@@ -2,14 +2,16 @@
 import "components/Login/LoginForm.css";
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // includes cookies and and authentication headers in cross-origin request
   axios.defaults.withCredentials = true;
+  //sends the users credentials to the server
   const logIn = (e) => {
     e.preventDefault();
     axios
@@ -18,7 +20,8 @@ export default function LoginForm() {
         password: password,
       })
       .then((result) => {
-        console.log("!!!", result);
+        // This redirects the user to his profilepage once the user successfully logs in
+        navigate(`/profile/${result.data[0].username}`);
       });
   };
 
