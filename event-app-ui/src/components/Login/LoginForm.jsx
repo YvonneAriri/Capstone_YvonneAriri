@@ -8,6 +8,8 @@ export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // includes cookies and and authentication headers in cross-origin request
+  axios.defaults.withCredentials = true;
   const logIn = (e) => {
     e.preventDefault();
     axios
@@ -52,10 +54,7 @@ export default function LoginForm() {
             Login
           </button>
           <p>
-            Don&apos;t have an account?{" "}
-            <Link to="/signup">
-              <a href="">signUp</a>
-            </Link>
+            Don&apos;t have an account? <Link to="/signup">signUp</Link>
           </p>
         </div>
       </form>

@@ -2,10 +2,38 @@ import express from "express";
 import cors from "cors";
 import { sequelize } from "./database.js";
 import { User, Event } from "./models/index.js";
+import bcrypt from "bcrypt";
+
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+
+const saltRounds = 10;
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
+);
+
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    key: "userId",
+    secret: "subset",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60 * 60 * 24,
+    },
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
@@ -18,27 +46,41 @@ app.post("/signup", (req, res) => {
   const email = req.body.email;
   const tel = req.body.tel;
 
-  sequelize.query(
-    `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${password}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-    { type: sequelize.QueryTypes.INSERT },
-    (err, result) => {
+  bcrypt.hash(password, saltRounds, (err, hash) => {
+    if (err) {
       console.log(err);
     }
-  );
+    sequelize.query(
+      `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${hash}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+      { type: sequelize.QueryTypes.INSERT },
+      (err, result) => {
+        console.log(err);
+      }
+    );
+  });
 });
 
 app.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  const [result, metadata] = await sequelize.query(
-    `SELECT * FROM "public"."Users" WHERE username = '${username}' and password = '${password}'`,
+  const result = await sequelize.query(
+    `SELECT * FROM "public"."Users" WHERE username = '${username}'`,
     { type: sequelize.QueryTypes.SELECT }
   );
-  if (result) {
-    res.send(result);
+
+  if (result.length > 0) {
+    const match = await bcrypt.compare(password, result[0].password);
+
+    if (match) {
+      req.session.user = result;
+      console.log(req.session.user);
+      res.send(result);
+    } else {
+      res.send({ message: "Wrong username and wrong password" });
+    }
   } else {
-    res.send({ message: "Wrong username and wrong password" });
+    res.send({ message: "user doesn't exist" });
   }
   console.log(result);
 });
