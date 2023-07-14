@@ -105,12 +105,32 @@ app.get("/users", async (req, res) => {
 app.get("/events", async (req, res) => {
   try {
     const events = await Event.findAll({
+      // making the order of the events in a descending order depending on the time created
       order: [["createdAt", "DESC"]],
     });
     res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+//sending a POST request to the endpoint event_popup
+app.post("/event_popup", async (req, res) => {
+  const eventName = req.body.eventName;
+  const description = req.body.description;
+  const location = req.body.location;
+  const username = req.body.username;
+  const startTime = req.body.startTime;
+  const endTime = req.body.endTime;
+
+  //used the sequelize.query to inserting data into the events table
+  sequelize.query(
+    `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTime}','${endTime}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+    { type: sequelize.QueryTypes.INSERT },
+    (err, result) => {
+      console.log(err);
+    }
+  );
 });
 
 sequelize
