@@ -101,6 +101,18 @@ app.get("/users", async (req, res) => {
   }
 });
 
+//sending a get request to the events endpoint
+app.get("/events", async (req, res) => {
+  try {
+    const events = await Event.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 sequelize
   .sync({ alter: true })
   .then(() => {
