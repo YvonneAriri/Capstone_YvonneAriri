@@ -5,7 +5,7 @@ import { User, Event } from "./models/index.js";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import session from "express-session";
+import { createTokens, validateToken } from "./JWT.js";
 
 const saltRounds = 10;
 
@@ -22,26 +22,11 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    key: "userId",
-    secret: "subset",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      expires: 60 * 60 * 24,
-    },
-  })
-);
-
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
 /*
   created a get request to the endpoint to retrieve the users profile details for the
   specified username and sends it in Json format
  */
-app.get("/profile/:username", async (req, res) => {
+app.get("/profile/:username", validateToken, async (req, res) => {
   const username = req.params.username;
 
   const profileInfo = await User.findOne({
@@ -52,6 +37,7 @@ app.get("/profile/:username", async (req, res) => {
   res.json(profileInfo);
 });
 
+//setting a POST request to the signup endpoint
 app.post("/signup", (req, res) => {
   const fullname = req.body.fullname;
   const username = req.body.username;
@@ -61,22 +47,24 @@ app.post("/signup", (req, res) => {
 
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
-      console.log(err);
+      res.send(err);
     }
+    //used the sequelize.query method to insert data into the Users table
     sequelize.query(
       `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${hash}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
       { type: sequelize.QueryTypes.INSERT },
       (err, result) => {
-        console.log(err);
+        res.send(err);
       }
     );
   });
 });
 
+//setting a POST request to the login endpoint
 app.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-
+  //Used the sequelize.query method to retrieve data from the user's table
   const result = await sequelize.query(
     `SELECT * FROM "public"."Users" WHERE username = '${username}'`,
     { type: sequelize.QueryTypes.SELECT }
@@ -84,10 +72,16 @@ app.post("/login", async (req, res) => {
 
   if (result.length > 0) {
     const match = await bcrypt.compare(password, result[0].password);
-
     if (match) {
-      req.session.user = result;
-      console.log(req.session.user);
+      const accessToken = createTokens(result);
+      //setting a cookie in the HTTP response that will be sent to the client browser
+      res.cookie("access-token", accessToken, {
+        //setting the maximum age of the cookie
+        maxAge: 60 * 60 * 24 * 30 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+      });
       res.json(result);
     } else {
       res.send({ message: "Wrong username and wrong password" });
@@ -95,9 +89,9 @@ app.post("/login", async (req, res) => {
   } else {
     res.send({ message: "user doesn't exist" });
   }
-  console.log(result);
 });
 
+//sending a get request to the users endpoint
 app.get("/users", async (req, res) => {
   try {
     const users = await User.findAll();
@@ -105,11 +99,6 @@ app.get("/users", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
-
-app.get("/events", async (req, res) => {
-  const listOfEvents = await Event.findAll();
-  res.json(listOfEvents);
 });
 
 sequelize
@@ -121,5 +110,5 @@ sequelize
     });
   })
   .catch((error) => {
-    console.error("Unable to connect to the database:", error);
+    console.log("Unable to connect to the database:", error);
   });
