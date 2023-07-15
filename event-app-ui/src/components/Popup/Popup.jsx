@@ -19,7 +19,8 @@ export default function Popup(props) {
   const { setIsOpen } = props;
   const { username } = props;
 
-  const eventInput = () => {
+  const eventInput = (e) => {
+    e.preventDefault();
     if (
       eventName.length === 0 ||
       description.length === 0 ||
@@ -37,16 +38,6 @@ export default function Popup(props) {
         endTime: endTime,
         username: username,
       });
-    }
-
-    if (
-      eventName.length === 0 ||
-      description.length === 0 ||
-      location.length === 0 ||
-      startTime.length === 0 ||
-      endTime.length === 0
-    ) {
-      setError(true);
     }
   };
 
