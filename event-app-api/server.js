@@ -36,6 +36,41 @@ app.get("/profile/:username", validateToken, async (req, res) => {
 
   res.json(profileInfo);
 });
+//setting a POST request to the editProfile  endpoint
+app.post("/editProfile", (req, res) => {
+  const username = req.body.username;
+  const fullname = req.body.fullname;
+  const email = req.body.email;
+  const tel = req.body.tel;
+
+  if (fullname) {
+    sequelize.query(
+      `UPDATE "public"."Users" SET fullname = '${fullname}' WHERE username = '${username}'`,
+      { type: sequelize.QueryTypes.UPDATE },
+      (err, result) => {
+        res.send(err);
+      }
+    );
+  }
+  if (email) {
+    sequelize.query(
+      `UPDATE "public"."Users" SET email = '${email}' WHERE username = '${username}'`,
+      { type: sequelize.QueryTypes.UPDATE },
+      (err, result) => {
+        res.send(err);
+      }
+    );
+  }
+  if (tel) {
+    sequelize.query(
+      `UPDATE "public"."Users" SET tel = '${tel}' WHERE username = '${username}'`,
+      { type: sequelize.QueryTypes.UPDATE },
+      (err, result) => {
+        res.send(err);
+      }
+    );
+  }
+});
 
 //setting a POST request to the signup endpoint
 app.post("/signup", (req, res) => {
@@ -114,6 +149,28 @@ app.get("/events", async (req, res) => {
   }
 });
 
+//logout button to delete the cookies once clicked
+app.get("/logout", async (req, res) => {
+  if (!req.cookies) {
+    res.status(401).end();
+    return;
+  }
+
+  const accessToken = req.cookies["access-token"];
+  if (!accessToken) {
+    res.status(401).end();
+    return;
+  }
+
+  res.cookie("access-token", "", {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: true,
+    expires: new Date(),
+  });
+  res.end();
+});
+
 //sending a POST request to the endpoint event_popup
 app.post("/event_popup", async (req, res) => {
   const eventName = req.body.eventName;
@@ -128,19 +185,12 @@ app.post("/event_popup", async (req, res) => {
     `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTime}','${endTime}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
     { type: sequelize.QueryTypes.INSERT },
     (err, result) => {
-      console.log(err);
+      res.send(err);
     }
   );
 });
 
-sequelize
-  .sync({ alter: true })
-  .then(() => {
-    const port = 3000;
-    app.listen(port, () => {
-      console.log(`App is listening on port ${port}`);
-    });
-  })
-  .catch((error) => {
-    console.log("Unable to connect to the database:", error);
-  });
+sequelize.sync({ alter: true }).then(() => {
+  const port = 3000;
+  app.listen(port, () => {});
+});
