@@ -1,0 +1,11 @@
+.edit-profile {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  margin: none;
+  margin-bottom: 0;
+}
+.edit-input {
+  width: 100%;
+  margin: 1rem;
+}
