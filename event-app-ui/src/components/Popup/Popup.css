@@ -5,10 +5,10 @@
   align-items: center;
   margin: 0;
 
-  background: white;
-  border: 1rem solid rgba(255, 255, 255, 0.5);
+  background: #144272;
+  border: solid rgba(255, 255, 255, 0.5);
   border-radius: 1rem;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(1.3rem);
   box-shadow: 0 0 30rem rgba(0, 0, 0, 0.5);
 }
 .popup-container {
@@ -22,6 +22,9 @@ input {
   border-bottom: solid #162938;
   margin: 1rem 0;
 }
+#inputCreateEvent::placeholder {
+  color: black;
+}
 .close-btn {
   background: none;
   color: red;
@@ -31,10 +34,7 @@ input {
   justify-content: end;
   margin: 0;
 }
-span {
-  color: red;
-  font-size: small;
-}
+
 .title {
   color: black;
   text-align: center;

@@ -5,6 +5,7 @@ import axios from "axios";
 import Popup from "components/Popup/Popup";
 import Navbar from "components/Navbar/Navbar";
 import EditProfile from "../EditProfile/EditProfile";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function Profile() {
   // assign the extracted value 'username' to id
@@ -39,6 +40,7 @@ export default function Profile() {
     }
     getProfileInfo();
   }, [id, navigate]);
+
   //once the logout button is clicked it redirects the person to the login page
   const handleLogout = async () => {
     try {
@@ -47,6 +49,7 @@ export default function Profile() {
       navigate("/login");
     }
   };
+
   //fetches thte event data and update the eventData state with the received data
   useEffect(() => {
     axios.get(`http://localhost:3000/events`).then((res) => {
@@ -57,14 +60,17 @@ export default function Profile() {
   return (
     <div>
       <Navbar />
+
       {/* sending setIsOpen as props popup */}
 
-      <button onClick={handleLogout}>Logout</button>
-      <h1>Welcome {username}!</h1>
+      <h1 className="greeting">Welcome Back {username}!</h1>
       <div className="profile">
         <div className="profile-container">
+          <div className="user" onClick>
+            {" "}
+            <FaUserCircle />
+          </div>
           <h1>User Profile</h1>
-          <p>Username: {username}</p>
           {openProfile ? (
             <EditProfile
               setOpenProfile={setOpenProfile}
@@ -75,6 +81,7 @@ export default function Profile() {
             />
           ) : (
             <div className="profileInfo">
+              <p>Username: {username}</p>
               <p>Fullname: {fullname}</p>
               <p>Email: {email}</p>
               <p>Tel: {tel}</p>
@@ -85,6 +92,7 @@ export default function Profile() {
               >
                 Edit Profile
               </button>
+              <button onClick={handleLogout}>Logout</button>
             </div>
           )}
         </div>
@@ -103,18 +111,17 @@ export default function Profile() {
             {isOpen ? (
               <Popup setIsOpen={setIsOpen} username={username} />
             ) : (
-              <div>
+              <div className="event-view">
                 {eventData.map((value, key) => {
                   if (value.username === username) {
                     return (
                       <div key={key} className="event">
-                        <div className="event-container">
-                          <h2>Event: {value.eventname}</h2>
-                          <p>Description: {value.description}</p>
-                          <p>Location: {value.location}</p>
-                          <p>Start Time: {value.starttime}</p>
-                          <p>End Time: {value.endtime}</p>
-                        </div>
+                        <h2> {value.eventname}</h2>
+                        <p> {value.description}</p>
+                        <p>{value.location}</p>
+                        <p> {value.starttime}</p>
+                        <p> {value.endtime}</p>
+                        <button>More Details</button>
                       </div>
                     );
                   }
