@@ -39,7 +39,7 @@ export default function LoginForm() {
         <div className="form-content">
           <header>Login</header>
           <form action="#" className="form-button">
-            <div className="input-box">
+            <div className="input-field">
               <input
                 autoComplete="off"
                 type="text"
@@ -53,7 +53,7 @@ export default function LoginForm() {
               />
             </div>
 
-            <div className="input-box" data-tip="8 characters minimum">
+            <div className="input-field">
               <input
                 autoComplete="off"
                 type="password"
@@ -69,7 +69,11 @@ export default function LoginForm() {
             <div className="error">{error}</div>
             <div>
               <br />
-              <button disabled={isDisabled} className="btn" onClick={logIn}>
+              <button
+                disabled={isDisabled}
+                className="input-field"
+                onClick={logIn}
+              >
                 Login
               </button>
               <p>
