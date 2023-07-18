@@ -42,7 +42,6 @@ export default function LoginForm() {
         <div className="form-content">
           <form action="#" className="form-button">
             <header>Login</header>
-
             <div className="input-field">
               <input
                 autoComplete="off"
