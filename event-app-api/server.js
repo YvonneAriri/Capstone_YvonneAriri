@@ -48,7 +48,7 @@ app.post("/editProfile", (req, res) => {
       `UPDATE "public"."Users" SET fullname = '${fullname}' WHERE username = '${username}'`,
       { type: sequelize.QueryTypes.UPDATE },
       (err, result) => {
-        res.send(err);
+        res.json(err);
       }
     );
   }
@@ -57,7 +57,7 @@ app.post("/editProfile", (req, res) => {
       `UPDATE "public"."Users" SET email = '${email}' WHERE username = '${username}'`,
       { type: sequelize.QueryTypes.UPDATE },
       (err, result) => {
-        res.send(err);
+        res.json(err);
       }
     );
   }
@@ -66,7 +66,7 @@ app.post("/editProfile", (req, res) => {
       `UPDATE "public"."Users" SET tel = '${tel}' WHERE username = '${username}'`,
       { type: sequelize.QueryTypes.UPDATE },
       (err, result) => {
-        res.send(err);
+        res.json(err);
       }
     );
   }
@@ -86,10 +86,11 @@ app.post("/signup", (req, res) => {
     }
     //used the sequelize.query method to insert data into the Users table
     sequelize.query(
+      //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
       `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${hash}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
       { type: sequelize.QueryTypes.INSERT },
       (err, result) => {
-        res.send(err);
+        res.json(err);
       }
     );
   });
@@ -153,13 +154,11 @@ app.get("/events", async (req, res) => {
 app.get("/logout", async (req, res) => {
   if (!req.cookies) {
     res.status(401).end();
-    return;
   }
 
   const accessToken = req.cookies["access-token"];
   if (!accessToken) {
     res.status(401).end();
-    return;
   }
 
   res.cookie("access-token", "", {
@@ -182,10 +181,11 @@ app.post("/event_popup", async (req, res) => {
 
   //used the sequelize.query to inserting data into the events table
   sequelize.query(
+    //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
     `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTime}','${endTime}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
     { type: sequelize.QueryTypes.INSERT },
     (err, result) => {
-      res.send(err);
+      res.json(err);
     }
   );
 });
