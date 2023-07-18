@@ -16,23 +16,14 @@ export default function EditProfile(props) {
   const [newFullname, setNewFullname] = useState(fullname);
   const [newEmail, setNewEmail] = useState(email);
   const [newTel, setNewTel] = useState(tel);
-  const [error, setError] = useState(false);
 
   const editProfile = () => {
-    if (
-      newFullname.length === 0 ||
-      newEmail.length === 0 ||
-      newTel.length === 0
-    ) {
-      setError(true);
-    } else {
-      axios.post(`http://localhost:3000/editProfile`, {
-        username: username,
-        fullname: newFullname,
-        email: newEmail,
-        tel: newTel,
-      });
-    }
+    axios.post(`http://localhost:3000/editProfile`, {
+      username: username,
+      fullname: newFullname,
+      email: newEmail,
+      tel: newTel,
+    });
   };
 
   return (
@@ -49,12 +40,7 @@ export default function EditProfile(props) {
           setNewFullname(e.target.value.trim());
         }}
       />
-      {error &&
-      (newFullname.length === 0 || newFullname.trim().length === 0) ? (
-        <label>fullname cannot be empty</label>
-      ) : (
-        ""
-      )}
+
       <input
         className="edit-input"
         type="email"
@@ -64,11 +50,7 @@ export default function EditProfile(props) {
           setNewEmail(e.target.value.trim());
         }}
       />
-      {error && (newEmail.length === 0 || newEmail.trim().length === 0) ? (
-        <label>email cannot be empty</label>
-      ) : (
-        ""
-      )}
+
       <input
         className="edit-input"
         type="tel"
@@ -78,11 +60,7 @@ export default function EditProfile(props) {
           setNewTel(e.target.value.trim());
         }}
       />
-      {error && (newTel.length === 0 || newTel.trim().length === 0) ? (
-        <label>tel cannot be empty</label>
-      ) : (
-        ""
-      )}
+
       <button
         onClick={() => {
           setOpenProfile(false);
