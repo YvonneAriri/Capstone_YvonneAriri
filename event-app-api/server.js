@@ -119,10 +119,10 @@ app.post("/login", async (req, res) => {
       });
       res.json(result);
     } else {
-      res.send({ message: "Wrong username and wrong password" });
+      res.json({ errorMessage: "Wrong username and wrong password" });
     }
   } else {
-    res.send({ message: "user doesn't exist" });
+    res.json({ errorMessage: "user doesn't exist" });
   }
 });
 
@@ -141,7 +141,7 @@ app.get("/events", async (req, res) => {
   try {
     const events = await Event.findAll({
       // making the order of the events in a descending order depending on the time created
-      order: [["createdAt", "DESC"]],
+      order: [["starttime", "ASC"]],
     });
     res.json(events);
   } catch (err) {
