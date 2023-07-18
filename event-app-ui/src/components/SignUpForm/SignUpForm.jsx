@@ -12,6 +12,7 @@ export default function SignUpForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
+
   const [type, setType] = useState("password");
 
   const navigate = useNavigate();
