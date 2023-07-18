@@ -5,6 +5,7 @@ export const createTokens = (result) => {
   //generates an access token using the jsonwebtoken library
   const accessToken = sign(
     { username: result.username, id: result.id },
+    // secret key to sign the token
     "ukpkitexmd",
     {
       issuer: "http://localhost:3000",
