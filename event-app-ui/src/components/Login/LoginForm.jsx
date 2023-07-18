@@ -37,8 +37,9 @@ export default function LoginForm() {
     <section className="container-form">
       <div className="login-form">
         <div className="form-content">
-          <header>Login</header>
           <form action="#" className="form-button">
+            <header>Login</header>
+
             <div className="input-field">
               <input
                 autoComplete="off"
@@ -76,7 +77,8 @@ export default function LoginForm() {
               >
                 Login
               </button>
-              <p>
+
+              <p className="account-exist">
                 Don&apos;t have an account? <Link to="/signup">signUp</Link>
               </p>
             </div>
