@@ -25,6 +25,7 @@ export default function EditProfile(props) {
       tel: newTel,
     });
   };
+  const isDisabled = newFullname === "" || newEmail === "" || newTel === "";
 
   return (
     <div className="edit-profile">
@@ -62,6 +63,7 @@ export default function EditProfile(props) {
       />
 
       <button
+        disabled={isDisabled}
         onClick={() => {
           setOpenProfile(false);
           editProfile();
