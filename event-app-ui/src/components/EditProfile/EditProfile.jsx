@@ -18,8 +18,7 @@ export default function EditProfile(props) {
   const [newTel, setNewTel] = useState(tel);
   const [error, setError] = useState(false);
 
-  const editProfile = (e) => {
-    e.preventDefault();
+  const editProfile = () => {
     if (
       newFullname.length === 0 ||
       newEmail.length === 0 ||
@@ -44,6 +43,7 @@ export default function EditProfile(props) {
       <input
         className="edit-input"
         type="text"
+        value={newFullname}
         placeholder="fullname"
         onChange={(e) => {
           setNewFullname(e.target.value.trim());
@@ -58,6 +58,7 @@ export default function EditProfile(props) {
       <input
         className="edit-input"
         type="email"
+        value={newEmail}
         placeholder="email"
         onChange={(e) => {
           setNewEmail(e.target.value.trim());
@@ -71,6 +72,7 @@ export default function EditProfile(props) {
       <input
         className="edit-input"
         type="tel"
+        value={newTel}
         placeholder="Tel"
         onChange={(e) => {
           setNewTel(e.target.value.trim());
@@ -81,7 +83,14 @@ export default function EditProfile(props) {
       ) : (
         ""
       )}
-      <button onClick={editProfile}>Submit</button>
+      <button
+        onClick={() => {
+          setOpenProfile(false);
+          editProfile();
+        }}
+      >
+        Submit
+      </button>
     </div>
   );
 }
