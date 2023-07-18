@@ -18,6 +18,8 @@ export default function Profile() {
   const [isOpen, setIsOpen] = useState(false);
   const [eventData, setEventData] = useState([]);
   const [openProfile, setOpenProfile] = useState(false);
+  const [futureEvent, setFutureEvent] = useState([]);
+  const [pastEvent, setPastEvent] = useState([]);
 
   const navigate = useNavigate();
   // sending an HTTP request to fetch the users profile information
@@ -56,6 +58,20 @@ export default function Profile() {
       setEventData(res.data);
     });
   }, []);
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const filterFutureEvent = eventData.filter((event) => {
+      const eventStartTime = new Date(event.starttime);
+      return eventStartTime > currentDate;
+    });
+    const filterPastEvent = eventData.filter((event) => {
+      const eventEndTime = new Date(event.endtime);
+      return eventEndTime < currentDate;
+    });
+    setFutureEvent(filterFutureEvent);
+    setPastEvent(filterPastEvent);
+  }, [eventData]);
 
   return (
     <div>
@@ -111,23 +127,92 @@ export default function Profile() {
             {isOpen ? (
               <Popup setIsOpen={setIsOpen} username={username} />
             ) : (
-              <div className="event-view">
-                {eventData.map((value, key) => {
-                  if (value.username === username) {
-                    return (
-                      <div key={key} className="event">
-                        <h2> {value.eventname}</h2>
-                        <p> {value.description}</p>
-                        <p>{value.location}</p>
-                        <p> {value.starttime}</p>
-                        <p> {value.endtime}</p>
-                        <button>More Details</button>
-                      </div>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
+              <>
+                <h2 className="future-past">Future Events</h2>
+                <div className="event-view">
+                  {futureEvent.map((value, key) => {
+                    if (value.username === username) {
+                      return (
+                        <div key={key} className="event">
+                          <h2> {value.eventname}</h2>
+                          <p> {value.description}</p>
+                          <p>{value.location}</p>
+                          <p>
+                            {" "}
+                            {new Date(value.starttime)
+                              .toLocaleDateString("en-US", {
+                                year: "2-digit",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                              })
+                              .replace(",", " -")}
+                          </p>
+                          <p>
+                            {" "}
+                            {new Date(value.endtime)
+                              .toLocaleDateString("en-US", {
+                                year: "2-digit",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                              })
+                              .replace(",", " -")}
+                          </p>
+                          <button>More Details</button>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+                <h2 className="future-past">Past Events</h2>
+                <div className="event-view">
+                  {pastEvent.map((value, key) => {
+                    if (value.username === username) {
+                      return (
+                        <div key={key} className="event">
+                          <h2> {value.eventname}</h2>
+                          <p> {value.description}</p>
+                          <p>{value.location}</p>
+                          <p>
+                            {" "}
+                            {new Date(value.starttime)
+                              .toLocaleDateString("en-US", {
+                                year: "2-digit",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                              })
+                              .replace(",", " -")}
+                          </p>
+                          <p>
+                            {" "}
+                            {new Date(value.endtime)
+                              .toLocaleDateString("en-US", {
+                                year: "2-digit",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                              })
+                              .replace(",", " -")}
+                          </p>
+                          <button>More Details</button>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+              </>
             )}
           </div>
         </div>
