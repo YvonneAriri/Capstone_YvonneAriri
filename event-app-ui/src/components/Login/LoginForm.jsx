@@ -1,15 +1,19 @@
-/* eslint-disable no-unused-vars */
 import "components/Login/LoginForm.css";
 import axios from "axios";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const isDisabled = username === "" || password === "";
 
   // includes cookies and and authentication headers in cross-origin request
   axios.defaults.withCredentials = true;
+  //sends the users credentials to the server
   const logIn = (e) => {
     e.preventDefault();
     axios
@@ -18,7 +22,14 @@ export default function LoginForm() {
         password: password,
       })
       .then((result) => {
-        console.log("!!!", result);
+        // displays the error made in the serverside
+        if (result.data.errorMessage) {
+          setError(result.data.errorMessage);
+        } else {
+          // This redirects the user to his profilepage once the user successfully logs in
+
+          navigate(`/profile/${result.data[0].username}`);
+        }
       });
   };
 
@@ -31,17 +42,20 @@ export default function LoginForm() {
           <input
             type="text"
             id="username"
+            value={username}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
+            required
             placeholder="Username"
           />
         </div>
 
-        <div className="input-box">
+        <div className="input-box" data-tip="8 characters minimum">
           <input
             type="password"
             id="password"
+            value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}
@@ -49,8 +63,10 @@ export default function LoginForm() {
             required
           />
         </div>
+        <div className="error">{error}</div>
         <div>
-          <button className="btn" onClick={logIn}>
+          <br />
+          <button disabled={isDisabled} className="btn" onClick={logIn}>
             Login
           </button>
           <p>

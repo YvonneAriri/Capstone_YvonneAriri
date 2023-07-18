@@ -3,20 +3,23 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin: 300px 600px 0px 700px;
+  height: 100%;
+  margin-right: 40rem;
+  margin-left: 40rem;
+  margin-top: 3rem;
   background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
+  border: solid rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
   backdrop-filter: blur(20px);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 1rem rgba(0, 0, 0, 0.5);
 }
 
 .signup-form .form-button {
   width: 100%;
-  padding: 40px;
+  padding: 1rem;
 }
 .form-button h2 {
-  font-size: 2em;
+  font-size: 1rem;
   color: #162938;
   text-align: center;
 }
@@ -24,8 +27,8 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-bottom: 2px solid #162938;
-  margin: 30px 0;
+  border-bottom: solid #162938;
+  margin: 1rem;
 }
 
 .input-box input {
@@ -34,20 +37,21 @@
   background: transparent;
   border: none;
   outline: none;
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 0 35px 0 5px;
+  padding: 0 1rem 0 1rem;
 }
 input::placeholder {
-  font-size: 16px;
+  font-size: 1rem;
   color: #162938;
 }
 
 .btn {
   padding: 10px 130px 10px 130px;
   text-align: center;
-  margin: auto;
+  margin-top: 1rem;
 }
 label {
   color: red;
+  padding: 1rem;
 }

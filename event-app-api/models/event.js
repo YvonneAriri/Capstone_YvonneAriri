@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database.js";
 
 export const Event = sequelize.define("Event", {
-  eventName: {
+  eventname: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -14,11 +14,11 @@ export const Event = sequelize.define("Event", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  startTime: {
+  starttime: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  endTime: {
+  endtime: {
     type: DataTypes.STRING,
     allowNull: false,
   },
