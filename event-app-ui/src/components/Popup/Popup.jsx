@@ -14,32 +14,26 @@ export default function Popup(props) {
   const [location, setLocation] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [error, setError] = useState(false);
 
   const { setIsOpen } = props;
   const { username } = props;
 
-  const eventInput = (e) => {
-    e.preventDefault();
-    if (
-      eventName.length === 0 ||
-      description.length === 0 ||
-      location.length === 0 ||
-      startTime.length === 0 ||
-      endTime.length === 0
-    ) {
-      setError(true);
-    } else {
-      axios.post(`http://localhost:3000/event_popup`, {
-        eventName: eventName,
-        description: description,
-        location: location,
-        startTime: startTime,
-        endTime: endTime,
-        username: username,
-      });
-    }
+  const eventInput = () => {
+    axios.post(`http://localhost:3000/event_popup`, {
+      eventName: eventName,
+      description: description,
+      location: location,
+      startTime: startTime,
+      endTime: endTime,
+      username: username,
+    });
   };
+
+  const isDisabled =
+    (eventName === "" && description === "") ||
+    location === "" ||
+    startTime === "" ||
+    endTime === "";
 
   return (
     <div className="popup-background">
@@ -60,12 +54,7 @@ export default function Popup(props) {
                 setEventName(e.target.value.trim());
               }}
             />
-            {error &&
-            (eventName.length === 0 || eventName.trim().length === 0) ? (
-              <label>eventName cannot be empty</label>
-            ) : (
-              ""
-            )}
+
             <input
               autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
@@ -76,12 +65,7 @@ export default function Popup(props) {
                 setStartTime(e.target.value.trim());
               }}
             />
-            {error &&
-            (startTime.trim().length === 0 || startTime.trim().length === 0) ? (
-              <label>startTime cannot be empty</label>
-            ) : (
-              ""
-            )}
+
             <input
               autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
@@ -92,12 +76,7 @@ export default function Popup(props) {
                 setEndTime(e.target.value.trim());
               }}
             />
-            {error &&
-            (endTime.trim().length === 0 || endTime.trim().length === 0) ? (
-              <label>endTime cannot be empty</label>
-            ) : (
-              ""
-            )}
+
             <input
               autoComplete="off"
               id="inputCreateEvent"
@@ -107,12 +86,7 @@ export default function Popup(props) {
                 setLocation(e.target.value.trim());
               }}
             />
-            {error &&
-            (location.trim().length === 0 || location.trim().length === 0) ? (
-              <label>location cannot be empty</label>
-            ) : (
-              ""
-            )}
+
             <input
               autoComplete="off"
               id="inputCreateEvent"
@@ -122,16 +96,9 @@ export default function Popup(props) {
                 setDescription(e.target.value.trim());
               }}
             />
-            {error &&
-            (description.trim().length === 0 ||
-              description.trim().length === 0) ? (
-              <label>description cannot be empty</label>
-            ) : (
-              ""
-            )}
 
             <br />
-            <button type="submit" onClick={eventInput}>
+            <button disabled={isDisabled} type="submit" onClick={eventInput}>
               Create Event
             </button>
           </form>
