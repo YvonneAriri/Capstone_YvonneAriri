@@ -31,69 +31,93 @@ export default function SignUpForm() {
     tel === "";
 
   return (
-    <div className="signup-form">
-      <form>
-        <h2>SignUp</h2>
-        <div className="input-box">
-          <input
-            type="text"
-            id="fullname"
-            onChange={(e) => {
-              setFullName(e.target.value.trim());
-            }}
-            placeholder="Fullname"
-          />
+    <section className="container-form">
+      <div className="signup-form">
+        <div className="form-content">
+          <header>SignUp</header>
+          <form>
+            <div className="input-box">
+              <input
+                autoComplete="off"
+                type="text"
+                id="fullname"
+                onChange={(e) => {
+                  setFullName(e.target.value.trim());
+                }}
+                placeholder="Fullname"
+                required
+              />
+            </div>
+
+            <div className="input-box">
+              <input
+                autoComplete="off"
+                type="text"
+                id="username"
+                onChange={(e) => {
+                  setUsername(e.target.value.trim());
+                }}
+                placeholder="Username"
+                required
+              />
+            </div>
+
+            <div className="input-box">
+              <input
+                autoComplete="off"
+                type="password"
+                id="password"
+                onChange={(e) => {
+                  setPassword(e.target.value.trim());
+                }}
+                placeholder="Password"
+                required
+              />
+            </div>
+
+            <div className="input-box">
+              <input
+                autoComplete="off"
+                type="email"
+                id="email"
+                onChange={(e) => {
+                  setEmail(e.target.value.trim());
+                }}
+                placeholder="Email"
+                required
+              />
+            </div>
+
+            <div className="input-box">
+              <input
+                autoComplete="off"
+                type="tel"
+                id="Tel"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                onChange={(e) => {
+                  setTel(e.target.value.trim());
+                }}
+                placeholder="Tel"
+                required
+              />
+            </div>
+
+            <div>
+              <button
+                disabled={isDisabled}
+                className="input-box"
+                onClick={register}
+              >
+                SignUp
+              </button>
+              <p className="account-exist">
+                Already have an account?<Link to="/login">login</Link>
+              </p>
+            </div>
+          </form>
+
         </div>
-        <div className="input-box">
-          <input
-            type="text"
-            id="username"
-            onChange={(e) => {
-              setUsername(e.target.value.trim());
-            }}
-            placeholder="Username"
-          />
-        </div>
-        <div className="input-box">
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => {
-              setPassword(e.target.value.trim());
-            }}
-            placeholder="Password"
-          />
-        </div>
-        <div className="input-box">
-          <input
-            type="email"
-            id="email"
-            onChange={(e) => {
-              setEmail(e.target.value.trim());
-            }}
-            placeholder="Email"
-          />
-        </div>
-        <div className="input-box">
-          <input
-            type="tel"
-            id="Tel"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            onChange={(e) => {
-              setTel(e.target.value.trim());
-            }}
-            placeholder="Tel"
-          />
-        </div>
-        <div>
-          <button disabled={isDisabled} className="btn" onClick={register}>
-            SignUp
-          </button>
-          <p>
-            Already have an account<Link to="/login">login</Link>
-          </p>
-        </div>
-      </form>
-    </div>
+      </div>
+    </section>
   );
 }

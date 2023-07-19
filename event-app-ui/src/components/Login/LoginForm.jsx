@@ -34,46 +34,58 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="Login">
-      <form action="#" className="form-button">
-        <h2>Login</h2>
+    <section className="container-form">
+      <div className="login-form">
+        <div className="form-content">
+          <form action="#" className="form-button">
+            <header>Login</header>
 
-        <div className="input-box">
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            required
-            placeholder="Username"
-          />
-        </div>
+            <div className="input-field">
+              <input
+                autoComplete="off"
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+                required
+                placeholder="Username"
+              />
+            </div>
 
-        <div className="input-box" data-tip="8 characters minimum">
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            placeholder="Password"
-            required
-          />
+            <div className="input-field">
+              <input
+                autoComplete="off"
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div className="error">{error}</div>
+            <div>
+              <br />
+              <button
+                disabled={isDisabled}
+                className="input-field"
+                onClick={logIn}
+              >
+                Login
+              </button>
+
+              <p className="account-exist">
+                Don&apos;t have an account? <Link to="/signup">signUp</Link>
+              </p>
+            </div>
+          </form>
+
         </div>
-        <div className="error">{error}</div>
-        <div>
-          <br />
-          <button disabled={isDisabled} className="btn" onClick={logIn}>
-            Login
-          </button>
-          <p>
-            Don&apos;t have an account? <Link to="/signup">signUp</Link>
-          </p>
-        </div>
-      </form>
-    </div>
+      </div>
+    </section>
   );
 }

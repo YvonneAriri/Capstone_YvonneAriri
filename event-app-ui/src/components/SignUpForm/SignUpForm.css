@@ -1,57 +1,64 @@
-.signup-form {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  margin-right: 40rem;
-  margin-left: 40rem;
-  margin-top: 3rem;
-  background: transparent;
-  border: solid rgba(255, 255, 255, 0.5);
-  border-radius: 1rem;
-  backdrop-filter: blur(20px);
-  box-shadow: 1rem rgba(0, 0, 0, 0.5);
-}
-
-.signup-form .form-button {
-  width: 100%;
-  padding: 1rem;
-}
-.form-button h2 {
-  font-size: 1rem;
-  color: #162938;
-  text-align: center;
-}
-.input-box {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-bottom: solid #162938;
-  margin: 1rem;
-}
-
-.input-box input {
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0 1rem 0 1rem;
-}
-input::placeholder {
-  font-size: 1rem;
-  color: #162938;
-}
-
-.btn {
-  padding: 10px 130px 10px 130px;
-  text-align: center;
-  margin-top: 1rem;
-}
 label {
   color: red;
   padding: 1rem;
+}
+.container-form {
+  height: 100vh;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.signup-form {
+  max-width: 26.9rem;
+  width: 100%;
+  padding: 1.9rem;
+  border-radius: 0.4rem;
+  background-color: #111;
+  opacity: 0.8;
+
+  border: solid white;
+  box-shadow: 0 0 0.6rem rgba(255, 255, 255, 1);
+}
+header {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+form {
+  margin-top: 1.9rem;
+}
+form .input-box {
+  height: 2.8rem;
+  width: 100%;
+  margin-top: 1em;
+  border: none;
+  margin-bottom: 1em;
+  border-bottom: 0.1rem solid white;
+}
+.input-box input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: white;
+  padding: 0.6rem 0 2.5rem 0;
+  outline: 0;
+}
+.input-box button {
+  height: 100%;
+  width: 100%;
+  border: none;
+  font-size: large;
+}
+.account-exist {
+  display: flex;
+  justify-content: center;
+  color: white;
+}
+input::placeholder {
+  color: white;
+  font-size: medium;
 }

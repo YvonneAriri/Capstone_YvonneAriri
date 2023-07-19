@@ -1,8 +1,7 @@
 .profile-container {
   display: flex;
-  justify-content: center;
+  padding: 0;
   flex-direction: column;
-  align-items: center;
   margin: 0;
   color: white;
   height: 30rem;
@@ -15,13 +14,13 @@
 }
 .listOfEvents {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   margin-left: 2rem;
   color: white;
   width: 100%;
-  background: transparent;
+  background-color: #111;
+  opacity: 0.9;
+  align-items: center;
   border: solid rgba(255, 255, 255, 0.5);
   border-radius: 2rem;
   backdrop-filter: blur(10rem);
@@ -35,8 +34,7 @@
 .plus-btn {
   flex-direction: column;
   align-items: end;
-  background-color: transparent;
-
+  background-color: #144272;
   font-size: 2rem;
   margin: 1rem;
   color: white;
@@ -49,18 +47,17 @@
   align-items: end;
   justify-content: end;
 }
-.event-container {
-  display: flex;
-  justify-content: center;
+.event {
   flex-direction: column;
-  align-items: center;
+  display: flex;
+  flex: 1;
   color: white;
   margin: 1rem;
-  font: 1em sans-serif;
+  word-wrap: break-word;
   font-size: 1.5em;
-  font-weight: 700;
-  padding: 0px 2rem 0px 2rem;
-  background: transparent;
+  margin-bottom: 0.6rem;
+  padding: 3.1rem;
+  background-color: #144272;
   border: solid rgba(255, 255, 255, 0.5);
   border-radius: 1rem;
   backdrop-filter: blur(10rem);
@@ -69,4 +66,18 @@
 h1 {
   color: white;
   text-align: center;
+}
+.user {
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+}
+.event-view {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  margin-top: 0;
 }

@@ -46,6 +46,7 @@ export default function Popup(props) {
             <p className="title">Eveprep</p>
 
             <input
+              autoComplete="off"
               id="inputCreateEvent"
               name="eventName"
               placeholder="eventName"
@@ -55,6 +56,7 @@ export default function Popup(props) {
             />
 
             <input
+              autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
               type="datetime-local"
               id="inputCreateEvent"
@@ -65,6 +67,7 @@ export default function Popup(props) {
             />
 
             <input
+              autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
               id="inputCreateEvent"
               type="datetime-local"
@@ -75,6 +78,7 @@ export default function Popup(props) {
             />
 
             <input
+              autoComplete="off"
               id="inputCreateEvent"
               name="location"
               placeholder="location"
@@ -84,6 +88,7 @@ export default function Popup(props) {
             />
 
             <input
+              autoComplete="off"
               id="inputCreateEvent"
               name="description"
               placeholder="description"

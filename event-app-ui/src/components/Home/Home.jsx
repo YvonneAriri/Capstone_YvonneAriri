@@ -17,6 +17,9 @@ export default function Home() {
           <button className="signup-btn">SignUp</button>
         </Link>
       </div>
+      <div>
+        <h1>All About the App</h1>
+      </div>
     </div>
   );
 }
