@@ -36,6 +36,7 @@ app.get("/profile/:username", validateToken, async (req, res) => {
 
   res.json(profileInfo);
 });
+
 //setting a POST request to the editProfile  endpoint
 app.post("/editProfile", (req, res) => {
   const username = req.body.username;
@@ -138,13 +139,36 @@ app.get("/users", async (req, res) => {
 });
 
 //sending a get request to the events endpoint
-app.get("/events", async (req, res) => {
+app.get("/events/:username", async (req, res) => {
   try {
+    // filtered the events by the user's username using useParam
+    const username = req.params.username;
     const events = await Event.findAll({
       // making the order of the events in a descending order depending on the time created
       order: [["starttime", "ASC"]],
+      where: { username: username },
     });
-    res.json(events);
+    //filtered the users event into Ongoing, future, and past to keep track of their events
+    const currentDate = new Date();
+    const onGoingEvents = events.filter((event) => {
+      const eventStartTime = new Date(event.starttime);
+      const eventEndTime = new Date(event.endtime);
+      return eventStartTime <= currentDate && eventEndTime > currentDate;
+    });
+    const futureEvents = events.filter((event) => {
+      const eventStartTime = new Date(event.starttime);
+      return eventStartTime > currentDate;
+    });
+    const pastEvents = events.filter((event) => {
+      const eventEndTime = new Date(event.endtime);
+      return eventEndTime < currentDate;
+    });
+
+    res.json({
+      onGoingEvents: onGoingEvents,
+      futureEvents: futureEvents,
+      pastEvents: pastEvents,
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
