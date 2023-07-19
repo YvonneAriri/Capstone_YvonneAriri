@@ -71,8 +71,7 @@ export default function Profile() {
       <h1 className="greeting">Welcome Back {username}!</h1>
       <div className="profile">
         <div className="profile-container">
-          <div className="user" onClick>
-            {" "}
+          <div className="user">
             <FaUserCircle />
           </div>
           <h1>User Profile</h1>
