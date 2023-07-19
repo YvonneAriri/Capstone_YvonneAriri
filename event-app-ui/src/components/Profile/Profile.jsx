@@ -6,6 +6,7 @@ import Popup from "components/Popup/Popup";
 import Navbar from "components/Navbar/Navbar";
 import EditProfile from "../EditProfile/EditProfile";
 import { FaUserCircle } from "react-icons/fa";
+import EventSection from "../EventSection/EventSection";
 
 export default function Profile() {
   // assign the extracted value 'username' to id
@@ -16,10 +17,10 @@ export default function Profile() {
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [eventData, setEventData] = useState([]);
   const [openProfile, setOpenProfile] = useState(false);
-  const [futureEvent, setFutureEvent] = useState([]);
-  const [pastEvent, setPastEvent] = useState([]);
+  const [onGoingEvents, setOnGoingEvents] = useState([]);
+  const [futureEvents, setFutureEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
 
   const navigate = useNavigate();
   // sending an HTTP request to fetch the users profile information
@@ -30,8 +31,8 @@ export default function Profile() {
     async function getProfileInfo() {
       try {
         const response = await axios.get(`http://localhost:3000/profile/${id}`);
-
         const { username: user, fullname, email, tel } = response.data;
+
         setUsername(user);
         setFullname(fullname);
         setEmail(email);
@@ -52,26 +53,14 @@ export default function Profile() {
     }
   };
 
-  //fetches thte event data and update the eventData state with the received data
+  //fetches the event data and update the eventData state with the received data
   useEffect(() => {
-    axios.get(`http://localhost:3000/events`).then((res) => {
-      setEventData(res.data);
+    axios.get(`http://localhost:3000/events/${id}`).then((res) => {
+      setOnGoingEvents(res.data.onGoingEvents);
+      setFutureEvents(res.data.futureEvents);
+      setPastEvents(res.data.pastEvents);
     });
-  }, []);
-
-  useEffect(() => {
-    const currentDate = new Date();
-    const filterFutureEvent = eventData.filter((event) => {
-      const eventStartTime = new Date(event.starttime);
-      return eventStartTime > currentDate;
-    });
-    const filterPastEvent = eventData.filter((event) => {
-      const eventEndTime = new Date(event.endtime);
-      return eventEndTime < currentDate;
-    });
-    setFutureEvent(filterFutureEvent);
-    setPastEvent(filterPastEvent);
-  }, [eventData]);
+  }, [id]);
 
   return (
     <div>
@@ -128,90 +117,15 @@ export default function Profile() {
               <Popup setIsOpen={setIsOpen} username={username} />
             ) : (
               <>
-                <h2 className="future-past">Future Events</h2>
-                <div className="event-view">
-                  {futureEvent.map((value, key) => {
-                    if (value.username === username) {
-                      return (
-                        <div key={key} className="event">
-                          <h2> {value.eventname}</h2>
-                          <p> {value.description}</p>
-                          <p>{value.location}</p>
-                          <p>
-                            {" "}
-                            {new Date(value.starttime)
-                              .toLocaleDateString("en-US", {
-                                year: "2-digit",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              })
-                              .replace(",", " -")}
-                          </p>
-                          <p>
-                            {" "}
-                            {new Date(value.endtime)
-                              .toLocaleDateString("en-US", {
-                                year: "2-digit",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              })
-                              .replace(",", " -")}
-                          </p>
-                          <button>More Details</button>
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-                <h2 className="future-past">Past Events</h2>
-                <div className="event-view">
-                  {pastEvent.map((value, key) => {
-                    if (value.username === username) {
-                      return (
-                        <div key={key} className="event">
-                          <h2> {value.eventname}</h2>
-                          <p> {value.description}</p>
-                          <p>{value.location}</p>
-                          <p>
-                            {" "}
-                            {new Date(value.starttime)
-                              .toLocaleDateString("en-US", {
-                                year: "2-digit",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              })
-                              .replace(",", " -")}
-                          </p>
-                          <p>
-                            {" "}
-                            {new Date(value.endtime)
-                              .toLocaleDateString("en-US", {
-                                year: "2-digit",
-                                month: "2-digit",
-                                day: "2-digit",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              })
-                              .replace(",", " -")}
-                          </p>
-                          <button>More Details</button>
-                        </div>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
+                <EventSection
+                  events={onGoingEvents}
+                  sectionTitle="Ongoing events"
+                />
+                <EventSection
+                  events={futureEvents}
+                  sectionTitle="Future events"
+                />
+                <EventSection events={pastEvents} sectionTitle="Past events" />
               </>
             )}
           </div>
