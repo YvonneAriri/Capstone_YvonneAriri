@@ -50,6 +50,7 @@ export default function Popup(props) {
               id="inputCreateEvent"
               name="eventName"
               placeholder="Event name"
+              maxLength="255"
               onChange={(e) => {
                 setEventName(e.target.value.trim());
               }}
@@ -81,6 +82,7 @@ export default function Popup(props) {
               autoComplete="off"
               id="inputCreateEvent"
               name="description"
+              maxLength="255"
               placeholder="Event description"
               onChange={(e) => {
                 setDescription(e.target.value.trim());
