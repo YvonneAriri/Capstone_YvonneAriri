@@ -35,7 +35,7 @@ export default function EventSection(props) {
 
       const weather = await getLatLng(results[0]);
       const response = await fetch(
-        `${WEATHER_API.base}weather?lat=${weather.B}&lon=${weather.lng}&units=metric&APPID=${WEATHER_API.key}`
+        `${WEATHER_API.base}weather?lat=${weather.lat}&lon=${weather.lng}&units=metric&APPID=${WEATHER_API.key}`
       );
       const data = await response.json();
       setWeatherInfo(data);
