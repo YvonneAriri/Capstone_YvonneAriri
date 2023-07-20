@@ -1,9 +1,7 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "components/LocationSearchInput/LocationSearchInput.css";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-} from "react-places-autocomplete";
+import PlacesAutocomplete from "react-places-autocomplete";
 
 LocationSearchInput.propTypes = {
   setLocation: PropTypes.func.isRequired,
@@ -13,18 +11,13 @@ export default function LocationSearchInput(props) {
   const [address, setAddress] = useState("");
   const { setLocation } = props;
 
-  useEffect(() => {
-    setLocation(address);
-  }, [address, setLocation]);
-
   const handleChange = (inputValue) => {
     setAddress(inputValue);
   };
 
   const handleSelect = (inputValue) => {
-    geocodeByAddress(inputValue)
-      .catch((error) => console.error("Error", error))
-      .finally(() => setAddress(inputValue));
+    setAddress(inputValue);
+    setLocation(inputValue);
   };
 
   return (
