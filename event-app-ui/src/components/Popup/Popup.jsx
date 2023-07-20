@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import "components/Popup/Popup.css";
 import { useState } from "react";
+import LocationSearchInput from "components/LocationSearchInput/LocationSearchInput";
 
 Popup.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
@@ -44,59 +45,47 @@ export default function Popup(props) {
               X
             </button>
             <p className="title">Eveprep</p>
-
             <input
               autoComplete="off"
               id="inputCreateEvent"
               name="eventName"
-              placeholder="eventName"
+              placeholder="Event name"
               onChange={(e) => {
                 setEventName(e.target.value.trim());
               }}
             />
-
+            Start time:{" "}
             <input
               autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
               type="datetime-local"
               id="inputCreateEvent"
-              placeholder="startTime"
+              placeholder="Start time"
               onChange={(e) => {
                 setStartTime(e.target.value.trim());
               }}
             />
-
+            End time:{" "}
             <input
               autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
               id="inputCreateEvent"
               type="datetime-local"
-              placeholder="endTime"
+              placeholder="End time"
               onChange={(e) => {
                 setEndTime(e.target.value.trim());
               }}
             />
-
-            <input
-              autoComplete="off"
-              id="inputCreateEvent"
-              name="location"
-              placeholder="location"
-              onChange={(e) => {
-                setLocation(e.target.value.trim());
-              }}
-            />
-
+            <LocationSearchInput setLocation={setLocation} />
             <input
               autoComplete="off"
               id="inputCreateEvent"
               name="description"
-              placeholder="description"
+              placeholder="Event description"
               onChange={(e) => {
                 setDescription(e.target.value.trim());
               }}
             />
-
             <br />
             <button disabled={isDisabled} type="submit" onClick={eventInput}>
               Create Event

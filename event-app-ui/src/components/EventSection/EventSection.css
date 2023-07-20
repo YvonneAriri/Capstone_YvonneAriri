@@ -1,0 +1,28 @@
+.event {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+  color: white;
+  margin: 1rem;
+  word-wrap: break-word;
+  font-size: 1.5em;
+  margin-bottom: 0.6rem;
+  padding: 3.1rem;
+  background-color: #144272;
+  border: solid rgba(255, 255, 255, 0.5);
+  border-radius: 1rem;
+  backdrop-filter: blur(10rem);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+}
+
+.event-view {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 0;
+}
+
+.event-section-title {
+  padding-left: 3.1rem;
+}

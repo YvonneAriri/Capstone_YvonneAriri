@@ -9,5 +9,15 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="module">
+      import { API_KEY } from "./api-key.js";
+
+      // Load google maps javascript API
+      var apiScript = document.createElement("script");
+      apiScript.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=Function.prototype`;
+      apiScript.innerHTML = null;
+      apiScript.async = true;
+      document.body.appendChild(apiScript);
+    </script>
   </body>
 </html>
