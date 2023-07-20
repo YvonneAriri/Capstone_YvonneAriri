@@ -28,49 +28,53 @@ export default function EditProfile(props) {
   const isDisabled = newFullname === "" || newEmail === "" || newTel === "";
 
   return (
-    <div className="edit-profile">
-      <button className="close-button" onClick={() => setOpenProfile(false)}>
+    <>
+      <button className="close-btn" onClick={() => setOpenProfile(false)}>
         X
       </button>
-      <input
-        className="edit-input"
-        type="text"
-        value={newFullname}
-        placeholder="fullname"
-        onChange={(e) => {
-          setNewFullname(e.target.value.trim());
-        }}
-      />
+      <div className="edit-profile">
+        <input
+          className="edit-input"
+          type="text"
+          value={newFullname}
+          placeholder="Fullname"
+          onChange={(e) => {
+            setNewFullname(e.target.value.trim());
+          }}
+        />
 
-      <input
-        className="edit-input"
-        type="email"
-        value={newEmail}
-        placeholder="email"
-        onChange={(e) => {
-          setNewEmail(e.target.value.trim());
-        }}
-      />
+        <input
+          className="edit-input"
+          type="email"
+          value={newEmail}
+          placeholder="Email"
+          onChange={(e) => {
+            setNewEmail(e.target.value.trim());
+          }}
+        />
 
-      <input
-        className="edit-input"
-        type="tel"
-        value={newTel}
-        placeholder="Tel"
-        onChange={(e) => {
-          setNewTel(e.target.value.trim());
-        }}
-      />
-
-      <button
-        disabled={isDisabled}
-        onClick={() => {
-          setOpenProfile(false);
-          editProfile();
-        }}
-      >
-        Submit
-      </button>
-    </div>
+        <input
+          className="edit-input"
+          type="tel"
+          value={newTel}
+          placeholder="Tel"
+          onChange={(e) => {
+            setNewTel(e.target.value.trim());
+          }}
+        />
+        <div className="center-btn">
+          <button
+            className="submit-btn"
+            disabled={isDisabled}
+            onClick={() => {
+              setOpenProfile(false);
+              editProfile();
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </>
   );
 }
