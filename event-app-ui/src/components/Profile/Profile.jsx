@@ -4,9 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Popup from "components/Popup/Popup";
 import Navbar from "components/Navbar/Navbar";
-import EditProfile from "../EditProfile/EditProfile";
-import { FaUserCircle } from "react-icons/fa";
-import EventSection from "../EventSection/EventSection";
+import EditProfile from "components/EditProfile/EditProfile";
+import EventSection from "components/EventSection/EventSection";
 
 export default function Profile() {
   // assign the extracted value 'username' to id
@@ -21,6 +20,8 @@ export default function Profile() {
   const [onGoingEvents, setOnGoingEvents] = useState([]);
   const [futureEvents, setFutureEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
+  const [isEventWeatherDetailOpen, setIsEventWeatherDetailOpen] =
+    useState(false);
 
   const navigate = useNavigate();
   // sending an HTTP request to fetch the users profile information
@@ -71,10 +72,9 @@ export default function Profile() {
       <h1 className="greeting">Welcome Back {username}!</h1>
       <div className="profile">
         <div className="profile-container">
-          <div className="user">
-            <FaUserCircle />
-          </div>
-          <h1>User Profile</h1>
+          <h2 className="user-profile">User Profile</h2>
+          <div className="user"></div>
+
           {openProfile ? (
             <EditProfile
               setOpenProfile={setOpenProfile}
@@ -85,18 +85,27 @@ export default function Profile() {
             />
           ) : (
             <div className="profileInfo">
-              <p>Username: {username}</p>
-              <p>Fullname: {fullname}</p>
-              <p>Email: {email}</p>
-              <p>Tel: {tel}</p>
-              <button
-                onClick={() => {
-                  setOpenProfile(true);
-                }}
-              >
-                Edit Profile
-              </button>
-              <button onClick={handleLogout}>Logout</button>
+              <p className="profile-details">Username: {username}</p>
+              <hr />
+              <p className="profile-details">Fullname: {fullname}</p>
+              <hr />
+              <p className="profile-details">Email: {email}</p>
+              <hr />
+              <p className="profile-details">Tel: {tel}</p>
+              <div className="edit-logout-btn-container">
+                <button
+                  className="edit-logout-btn"
+                  onClick={() => {
+                    setOpenProfile(true);
+                  }}
+                >
+                  Edit Profile
+                </button>
+
+                <button className="edit-logout-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -119,12 +128,21 @@ export default function Profile() {
                 <EventSection
                   events={onGoingEvents}
                   sectionTitle="Ongoing events"
+                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
                 />
                 <EventSection
                   events={futureEvents}
                   sectionTitle="Future events"
+                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
                 />
-                <EventSection events={pastEvents} sectionTitle="Past events" />
+                <EventSection
+                  events={pastEvents}
+                  sectionTitle="Past events"
+                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+                />
               </>
             )}
           </div>

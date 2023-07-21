@@ -37,8 +37,11 @@
   background-color: #144272;
   font-size: 2rem;
   margin: 1rem;
+  padding-left: 5px;
+  padding-right: 5px;
   color: white;
   border-color: white;
+  border-radius: 5px;
   backdrop-filter: blur(10rem);
   box-shadow: 0 0 3rem rgba(0, 0, 0, 0.5);
 }
@@ -56,4 +59,35 @@ h1 {
   background: transparent;
   border: none;
   font-size: 2rem;
+}
+.profile-details {
+  margin: 0px 0px 12px 40px;
+  font-size: 20px;
+}
+.user-profile {
+  text-align: center;
+  margin: 60px;
+}
+.edit-logout-btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-logout-btn {
+  height: 2.5rem;
+  width: 8rem;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  background-color: #00aada;
+  color: white;
+  border-radius: 8px;
+  border-color: white;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-left: 2px;
+}
+hr {
+  border-top: 0.1px solid #8c8b8b;
+  margin: 10px 30px 10px 30px;
 }
