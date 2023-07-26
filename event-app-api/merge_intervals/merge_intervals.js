@@ -42,6 +42,12 @@ export function findGaps(mergedIntervals) {
 // Function to check if an interval overlaps the other and vice versa
 export function isOverlapping(inputedEvent, events) {
   for (let i = 0; i < events.length; i++) {
+    if (
+      inputedEvent.starttime >= events[i].starttime &&
+      inputedEvent.endtime <= events[i].endtime
+    ) {
+      return true;
+    }
     if (inputedEvent.starttime <= events[i].starttime) {
       if (inputedEvent.endtime > events[i].starttime) {
         return true;
@@ -52,5 +58,6 @@ export function isOverlapping(inputedEvent, events) {
       }
     }
   }
+
   return false;
 }
