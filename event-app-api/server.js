@@ -84,16 +84,17 @@ app.post("/signup", (req, res) => {
   bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
       res.send(err);
+    } else {
+      //used the sequelize.query method to insert data into the Users table
+      sequelize.query(
+        //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
+        `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${hash}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+        { type: sequelize.QueryTypes.INSERT },
+        (err, result) => {
+          res.json(err);
+        }
+      );
     }
-    //used the sequelize.query method to insert data into the Users table
-    sequelize.query(
-      //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
-      `INSERT INTO "public"."Users" (fullname, username, password, email, tel, "createdAt", "updatedAt") VALUES ('${fullname}', '${username}', '${hash}', '${email}', '${tel}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-      { type: sequelize.QueryTypes.INSERT },
-      (err, result) => {
-        res.json(err);
-      }
-    );
   });
 });
 
@@ -203,10 +204,16 @@ app.post("/event_popup", async (req, res) => {
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
 
+  const startTimeObj = new Date(startTime);
+  const startTimeEpoch = startTimeObj.getTime() / 1000;
+
+  const endTimeObj = new Date(endTime);
+  const endTimeEpoch = endTimeObj.getTime() / 1000;
+
   //used the sequelize.query to inserting data into the events table
   sequelize.query(
     //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
-    `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTime}','${endTime}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+    `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTimeEpoch}','${endTimeEpoch}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
     { type: sequelize.QueryTypes.INSERT },
     (err, result) => {
       res.json(err);
