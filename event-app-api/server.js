@@ -6,6 +6,11 @@ import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { createTokens, validateToken } from "./JWT.js";
+import {
+  mergeIntervals,
+  findGaps,
+  isOverlapping,
+} from "./merge_intervals/merge_intervals.js";
 
 const saltRounds = 10;
 
@@ -150,18 +155,18 @@ app.get("/events/:username", async (req, res) => {
       where: { username: username },
     });
     //filtered the users event into Ongoing, future, and past to keep track of their events
-    const currentDate = new Date();
+    const currentDate = new Date().getTime() / 1000;
     const onGoingEvents = events.filter((event) => {
-      const eventStartTime = new Date(event.starttime);
-      const eventEndTime = new Date(event.endtime);
+      const eventStartTime = event.starttime;
+      const eventEndTime = event.endtime;
       return eventStartTime <= currentDate && eventEndTime > currentDate;
     });
     const futureEvents = events.filter((event) => {
-      const eventStartTime = new Date(event.starttime);
+      const eventStartTime = event.starttime;
       return eventStartTime > currentDate;
     });
     const pastEvents = events.filter((event) => {
-      const eventEndTime = new Date(event.endtime);
+      const eventEndTime = event.endtime;
       return eventEndTime < currentDate;
     });
 
@@ -204,21 +209,29 @@ app.post("/event_popup", async (req, res) => {
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
 
-  const startTimeObj = new Date(startTime);
-  const startTimeEpoch = startTimeObj.getTime() / 1000;
+  const startTimeEpoch = new Date(startTime).getTime() / 1000;
+  const endTimeEpoch = new Date(endTime).getTime() / 1000;
 
-  const endTimeObj = new Date(endTime);
-  const endTimeEpoch = endTimeObj.getTime() / 1000;
-
-  //used the sequelize.query to inserting data into the events table
-  sequelize.query(
-    //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
-    `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTimeEpoch}','${endTimeEpoch}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-    { type: sequelize.QueryTypes.INSERT },
-    (err, result) => {
-      res.json(err);
-    }
+  const events = await Event.findAll({
+    order: [["starttime", "ASC"]],
+    where: { username: username },
+  });
+  const isEventOverlapping = isOverlapping(
+    { starttime: startTimeEpoch, endtime: endTimeEpoch },
+    events
   );
+
+  if (!isEventOverlapping) {
+    //used the sequelize.query to inserting data into the events table
+    sequelize.query(
+      //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
+      `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTimeEpoch}','${endTimeEpoch}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+      { type: sequelize.QueryTypes.INSERT },
+      (err, result) => {
+        res.json(err);
+      }
+    );
+  }
 });
 
 sequelize.sync({ alter: true }).then(() => {
