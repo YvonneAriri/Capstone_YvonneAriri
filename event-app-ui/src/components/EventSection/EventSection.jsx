@@ -99,12 +99,12 @@ export default function EventSection(props) {
                   <p> {value.description}</p>
                   <p>{value.location}</p>
                   <p>
-                    {new Date(value.starttime)
+                    {new Date(value.starttime * 1000)
                       .toLocaleDateString("en-US", dateConversionConfig)
                       .replace(",", " -")}
                   </p>
                   <p>
-                    {new Date(value.endtime)
+                    {new Date(value.endtime * 1000)
                       .toLocaleDateString("en-US", dateConversionConfig)
                       .replace(",", " -")}
                   </p>

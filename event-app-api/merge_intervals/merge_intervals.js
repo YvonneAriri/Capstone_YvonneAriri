@@ -1,14 +1,12 @@
-export function mergeIntervals(testEvents3) {
-  const merged_intervals = [testEvents3[0]];
-  for (let i = 1; i < testEvents3.length; i++) {
-    const currentEvent = testEvents3[i];
+export function mergeIntervals(events) {
+  const merged_intervals = [events[0]];
+  for (let i = 1; i < events.length; i++) {
+    const currentEvent = events[i];
     const lastMergedEvent = merged_intervals[merged_intervals.length - 1];
 
-    let currentEndTime = new Date(currentEvent.endtime);
-    let lastMergeEndtime = new Date(lastMergedEvent.endtime);
-    let currentStartTime = new Date(currentEvent.starttime);
+    let currentEndTime = currentEvent.endtime;
 
-    if (currentStartTime <= lastMergeEndtime) {
+    if (currentEvent.starttime <= lastMergedEvent.endtime) {
       lastMergedEvent.endtime = Math.max(
         lastMergeEndtime.getTime(),
         currentEndTime.getTime()
@@ -39,4 +37,27 @@ export function findGaps(mergedIntervals) {
     }
   }
   return gaps;
+}
+
+// Function to check if an interval overlaps the other and vice versa
+export function isOverlapping(inputedEvent, events) {
+  for (let i = 0; i < events.length; i++) {
+    if (
+      inputedEvent.starttime >= events[i].starttime &&
+      inputedEvent.endtime <= events[i].endtime
+    ) {
+      return true;
+    }
+    if (inputedEvent.starttime <= events[i].starttime) {
+      if (inputedEvent.endtime > events[i].starttime) {
+        return true;
+      }
+    } else {
+      if (inputedEvent.endtime <= events[i].starttime) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
