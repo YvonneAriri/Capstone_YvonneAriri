@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "pg": "^8.11.1",
     "pg-hstore": "^2.3.4",
+    "qs": "^6.11.2",
     "sequelize": "^6.32.1"
   },
   "devDependencies": {
