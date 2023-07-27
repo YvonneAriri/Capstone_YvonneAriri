@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import axios from "axios";
 import "components/Popup/Popup.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LocationSearchInput from "components/LocationSearchInput/LocationSearchInput";
+import { MultiSelect } from "react-multi-select-component";
+import qs from "qs";
 
 Popup.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
@@ -15,20 +17,104 @@ export default function Popup(props) {
   const [location, setLocation] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [gaps, setGaps] = useState([]);
+  const [error, setError] = useState();
+  const [isChecked, setIsChecked] = useState(false);
 
-  const { setIsOpen } = props;
-  const { username } = props;
+  const dateConversionConfig = {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
 
-  const eventInput = () => {
-    axios.post(`http://localhost:3000/event_popup`, {
+  const { username, setIsOpen } = props;
+
+  const eventInput = async (e) => {
+    const response = await axios.post(`http://localhost:3000/event_popup`, {
       eventName: eventName,
       description: description,
       location: location,
       startTime: startTime,
       endTime: endTime,
       username: username,
+      selectedUsers: selectedUsers,
     });
+    //sends an
+    if (response.data.errorMessage) {
+      e.preventDefault();
+      setError(response.data.errorMessage);
+    } else {
+      setIsOpen(false);
+      setError("");
+    }
   };
+
+  const findGaps = async (e) => {
+    e.preventDefault();
+    try {
+      //creates an array of the selected users and also includes the current user to find the gaps between them
+      const participants = [
+        ...selectedUsers.map((user) => user.label),
+        username,
+      ];
+      //Serialize the 'params' object into a URL-encoded string with array values represented in square brackets format. This prepares the 'params' object for use in query parameters of a URL.
+      const result = await axios.get("http://localhost:3000/find_gaps", {
+        params: {
+          selectedUsers: participants,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { arrayFormat: "brackets" });
+        },
+      });
+
+      //converting the epoch time to the local date time
+      setGaps(
+        result.data.gaps.map((gap) => {
+          const startTime = new Date(gap.starttime * 1000)
+            .toLocaleDateString("en-US", dateConversionConfig)
+            .replace(",", " -");
+          const endTime = new Date(gap.endtime * 1000)
+            .toLocaleDateString("en-US", dateConversionConfig)
+            .replace(",", " -");
+          const label = startTime + " - " + endTime;
+
+          return label;
+        })
+      );
+    } catch (err) {
+      console.error("error fetching data", err.message);
+    }
+  };
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+  useEffect(() => {
+    async function getUsers() {
+      try {
+        const response = await axios.get("http://localhost:3000/users");
+        setUsers(
+          response.data.map((data) => {
+            return {
+              label: data.username,
+              value: data.username,
+              //making the user name disabled in the dropdown menu
+              disabled: data.username === username,
+            };
+          })
+        );
+      } catch (err) {
+        console.error("error fetching data", err.message);
+      }
+    }
+    getUsers();
+  }, [username]);
 
   const isDisabled =
     (eventName === "" && description === "") ||
@@ -46,6 +132,7 @@ export default function Popup(props) {
             </button>
             <p className="title">Eveprep</p>
             <input
+              className="eventInput"
               autoComplete="off"
               id="inputCreateEvent"
               name="eventName"
@@ -57,6 +144,7 @@ export default function Popup(props) {
             />
             Start time:{" "}
             <input
+              className="eventInput"
               autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
               type="datetime-local"
@@ -68,6 +156,7 @@ export default function Popup(props) {
             />
             End time:{" "}
             <input
+              className="eventInput"
               autoComplete="off"
               min={new Date().toISOString().slice(0, -8)}
               id="inputCreateEvent"
@@ -77,9 +166,13 @@ export default function Popup(props) {
                 setEndTime(e.target.value.trim());
               }}
             />
-            <LocationSearchInput setLocation={setLocation} />
+            <LocationSearchInput
+              setLocation={setLocation}
+              className="eventInput"
+            />
             <input
               autoComplete="off"
+              className="eventInput"
               id="inputCreateEvent"
               name="description"
               maxLength="255"
@@ -88,9 +181,48 @@ export default function Popup(props) {
                 setDescription(e.target.value.trim());
               }}
             />
+            <div className="checkbox_container">
+              <input
+                className="checkbox"
+                checked={isChecked}
+                type="checkbox"
+                onChange={handleCheckboxChange}
+              />
+              <p>Add other participant</p>
+            </div>
+            {/* creates a drop down menu of all the users with the current user's name disabled */}
+            {isChecked && (
+              <MultiSelect
+                options={users}
+                value={selectedUsers}
+                onChange={setSelectedUsers}
+                labelledBy="Select"
+              />
+            )}
+            {/* suggest times when both the user and the participants are free */}
+            {gaps.length ? (
+              <>
+                Pick a time between these ranges where all selected participants
+                are available:
+                <ul>
+                  {gaps.map((gap, index) => {
+                    return <li key={index}>{gap}</li>;
+                  })}
+                </ul>
+              </>
+            ) : null}
+            <p className="error">{error}</p>
             <br />
-            <button disabled={isDisabled} type="submit" onClick={eventInput}>
+            <button
+              className="edit-btn"
+              disabled={isDisabled}
+              type="submit"
+              onClick={eventInput}
+            >
               Create Event
+            </button>
+            <button className="edit-btn" onClick={findGaps}>
+              Find Gaps
             </button>
           </form>
         </div>
