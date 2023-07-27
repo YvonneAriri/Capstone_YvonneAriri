@@ -7,10 +7,7 @@ export function mergeIntervals(events) {
     let currentEndTime = currentEvent.endtime;
 
     if (currentEvent.starttime <= lastMergedEvent.endtime) {
-      lastMergedEvent.endtime = Math.max(
-        lastMergeEndtime.getTime(),
-        currentEndTime.getTime()
-      );
+      lastMergedEvent.endtime = Math.max(lastMergedEvent, currentEndTime);
     } else {
       merged_intervals.push(currentEvent);
     }
@@ -21,14 +18,21 @@ export function mergeIntervals(events) {
 
 export function findGaps(mergedIntervals) {
   const gaps = [];
+  //this check for gaps in the from the current date and time to the first evnet's starttime
+  const currentDate = new Date().getTime() / 1000;
+  if (mergedIntervals[0].starttime > currentDate) {
+    gaps.push({
+      starttime: currentDate,
+      endtime: mergedIntervals[0].starttime,
+    });
+  }
+
   if (mergedIntervals.length > 1) {
     for (let i = 1; i < mergedIntervals.length; i++) {
       const previousEvent = mergedIntervals[i - 1];
       const currentEvent = mergedIntervals[i];
       const gapStartTime = previousEvent.endtime;
       const gapEndTime = currentEvent.starttime;
-      const currentDate = new Date();
-      currentDate.setHours(23, 59, 59, 999);
 
       if (gapStartTime < gapEndTime) {
         // Found a gap, add it to the gaps array
@@ -41,21 +45,11 @@ export function findGaps(mergedIntervals) {
 
 // Function to check if an interval overlaps the other and vice versa
 export function isOverlapping(inputedEvent, events) {
-  for (let i = 0; i < events.length; i++) {
-    if (
-      inputedEvent.starttime >= events[i].starttime &&
-      inputedEvent.endtime <= events[i].endtime
-    ) {
-      return true;
-    }
-    if (inputedEvent.starttime <= events[i].starttime) {
-      if (inputedEvent.endtime > events[i].starttime) {
-        return true;
-      }
+  for (eventRange of events) {
+    if (inputedEvent.starttime < eventRange.starttime) {
+      if (inputedEvent.endtime > eventRange.starttime) return true;
     } else {
-      if (inputedEvent.endtime <= events[i].starttime) {
-        return true;
-      }
+      if (inputedEvent.starttime < eventRange.endtime) return true;
     }
   }
 
