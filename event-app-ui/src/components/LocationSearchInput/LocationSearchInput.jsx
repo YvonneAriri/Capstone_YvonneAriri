@@ -30,7 +30,7 @@ export default function LocationSearchInput(props) {
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
           <input
-            className="location-input"
+            className="eventInput"
             {...getInputProps({ placeholder: "Enter location for event..." })}
           />
           <div className="autocomplete-dropdown-container">
