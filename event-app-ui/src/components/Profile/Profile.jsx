@@ -94,7 +94,7 @@ export default function Profile() {
               <p className="profile-details">Tel: {tel}</p>
               <div className="edit-logout-btn-container">
                 <button
-                  className="edit-logout-btn"
+                  className="edit-btn"
                   onClick={() => {
                     setOpenProfile(true);
                   }}
@@ -102,7 +102,7 @@ export default function Profile() {
                   Edit Profile
                 </button>
 
-                <button className="edit-logout-btn" onClick={handleLogout}>
+                <button className="edit-btn" onClick={handleLogout}>
                   Logout
                 </button>
               </div>

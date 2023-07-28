@@ -15,7 +15,7 @@
   width: 100%;
   padding: 3rem;
 }
-input {
+.eventInput {
   position: relative;
   width: 100%;
   height: 3rem;
@@ -42,4 +42,8 @@ input {
   font-weight: 900;
   font-size: 3rem;
   margin: 0;
+}
+
+.checkbox_container {
+  display: flex;
 }
