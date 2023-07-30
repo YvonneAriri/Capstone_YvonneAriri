@@ -9,7 +9,7 @@ import {
 export default function Footer() {
   return (
     <div className="footer">
-      <div className="About-Us">
+      <div id="About-Us">
         <section className="banner">
           <div className="vision">
             <h2 className="evprep">Our Vision </h2>
