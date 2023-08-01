@@ -1,0 +1,24 @@
+.input {
+  position: fixed;
+  z-index: 0;
+  align-items: center;
+  border: none;
+  text-align: center;
+  font-weight: 600;
+  padding: 2rem;
+  margin: 1rem;
+  background-color: #111;
+  opacity: 0.8;
+  color: white;
+  border-radius: 1rem;
+
+  box-shadow: rgba(0, 0, 0, 0.25) 0 3rem 3rem, rgba(0, 0, 0, 0.12) 0 -1rem 2rem,
+    rgba(0, 0, 0, 0.12) 0 0.3rem 0.4rem, rgba(0, 0, 0, 0.17) 0 1rem 1rem,
+    rgba(0, 0, 0, 0.09) 0 -0.2rem 0.3rem;
+}
+
+button {
+  padding: 0.5rem;
+  margin: 0.5rem;
+  border-radius: 1rem;
+}

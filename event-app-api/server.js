@@ -10,7 +10,10 @@ import {
   mergeIntervals,
   findGaps,
   isOverlapping,
+  getAllUsersPreferredTimes,
+  respectsPreferredTimes,
 } from "./merge_intervals/merge_intervals.js";
+import { Op } from "sequelize";
 
 const saltRounds = 10;
 
@@ -28,9 +31,9 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 /*
-  created a get request to the endpoint to retrieve the users profile details for the
-  specified username and sends it in Json format
- */
+created a get request to the endpoint to retrieve the users profile details for the
+specified username and sends it in Json format
+*/
 app.get("/profile/:username", validateToken, async (req, res) => {
   const username = req.params.username;
 
@@ -42,12 +45,14 @@ app.get("/profile/:username", validateToken, async (req, res) => {
   res.json(profileInfo);
 });
 
-//setting a POST request to the editProfile  endpoint
+//setting a POST request to the editProfile endpoint
 app.post("/editProfile", (req, res) => {
   const username = req.body.username;
   const fullname = req.body.fullname;
   const email = req.body.email;
   const tel = req.body.tel;
+  const preferredEndTime = req.body.preferredendtime;
+  const preferredStartTime = req.body.preferredstarttime;
 
   if (fullname) {
     sequelize.query(
@@ -58,6 +63,25 @@ app.post("/editProfile", (req, res) => {
       }
     );
   }
+  if (preferredStartTime) {
+    sequelize.query(
+      `UPDATE "public"."Users" SET preferredstarttime = '${preferredStartTime}' WHERE username = '${username}'`,
+      { type: sequelize.QueryTypes.UPDATE },
+      (err, result) => {
+        res.json(err);
+      }
+    );
+  }
+  if (preferredEndTime) {
+    sequelize.query(
+      `UPDATE "public"."Users" SET preferredendtime = '${preferredEndTime}' WHERE username = '${username}'`,
+      { type: sequelize.QueryTypes.UPDATE },
+      (err, result) => {
+        res.json(err);
+      }
+    );
+  }
+
   if (email) {
     sequelize.query(
       `UPDATE "public"."Users" SET email = '${email}' WHERE username = '${username}'`,
@@ -200,6 +224,30 @@ app.get("/logout", async (req, res) => {
   res.end();
 });
 
+//sending a get request to the find_gap endpoint
+app.get("/find_availabilty", async (req, res) => {
+  const selectedUsers = req.query.selectedUsers.map((user) => {
+    return {
+      username: user,
+    };
+  });
+
+  const userPreferredTimes = await User.findAll({
+    where: { [Op.or]: selectedUsers },
+    attributes: ["preferredstarttime", "preferredendtime"],
+  });
+
+  const allUsersPreferredTime = getAllUsersPreferredTimes(userPreferredTimes);
+
+  const events = await Event.findAll({
+    order: [["starttime", "ASC"]],
+    where: { [Op.or]: selectedUsers },
+  });
+
+  const gaps = findGaps(mergeIntervals(events));
+  res.json({ userPreferredTimes: allUsersPreferredTime, gaps });
+});
+
 //sending a POST request to the endpoint event_popup
 app.post("/event_popup", async (req, res) => {
   const eventName = req.body.eventName;
@@ -208,29 +256,73 @@ app.post("/event_popup", async (req, res) => {
   const username = req.body.username;
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
+  const selectedUsers = req.body.selectedUsers.map((user) => {
+    return { username: user.label };
+  });
+
+  // Add creator username to selectedUsers
+  selectedUsers.push({ username: username });
 
   const startTimeEpoch = new Date(startTime).getTime() / 1000;
   const endTimeEpoch = new Date(endTime).getTime() / 1000;
 
-  const events = await Event.findAll({
-    order: [["starttime", "ASC"]],
-    where: { username: username },
-  });
-  const isEventOverlapping = isOverlapping(
-    { starttime: startTimeEpoch, endtime: endTimeEpoch },
-    events
-  );
+  if (startTimeEpoch > endTimeEpoch) {
+    //sending an error message to the client side
+    res.json({
+      errorMessage:
+        "Current selected start time is later than end time. Please fix and try again.",
+    });
+  } else {
+    // Sort events in ascending order for all selected users
+    const events = await Event.findAll({
+      order: [["starttime", "ASC"]],
+      where: { [Op.or]: selectedUsers },
+    });
+    // Get all selected users preferred start and end times from db
+    const userPreferredTimes = await User.findAll({
+      where: { [Op.or]: selectedUsers },
+      attributes: ["preferredstarttime", "preferredendtime"],
+    });
 
-  if (!isEventOverlapping) {
-    //used the sequelize.query to inserting data into the events table
-    sequelize.query(
-      //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
-      `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${username}', '${startTimeEpoch}','${endTimeEpoch}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-      { type: sequelize.QueryTypes.INSERT },
-      (err, result) => {
-        res.json(err);
-      }
+    // Get one start time and end time based on preferences that will work for all selected users
+    const jointPreferredTime = getAllUsersPreferredTimes(userPreferredTimes);
+    // Check if currently inputed time respects users preferred times or only one user is tied to event (the creator)
+    // We don't need to respect our own preferences.
+    const isValidTime =
+      respectsPreferredTimes(
+        startTimeEpoch,
+        endTimeEpoch,
+        jointPreferredTime
+      ) || selectedUsers.length == 1;
+
+    const isEventOverlapping = isOverlapping(
+      { starttime: startTimeEpoch, endtime: endTimeEpoch },
+      events
     );
+
+    if (isValidTime && !isEventOverlapping) {
+      for (let i = 0; i < selectedUsers.length; i++) {
+        //used the sequelize.query to inserting data into the events table
+        sequelize.query(
+          //The CURRENT_TIMESTAMP is the createdAt and the updatedAt in the database
+          `INSERT INTO "public"."Events" (eventName, description, location , username, startTime, endTime, "createdAt", "updatedAt") VALUES ('${eventName}', '${description}', '${location}', '${selectedUsers[i].username}', '${startTimeEpoch}','${endTimeEpoch}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+          { type: sequelize.QueryTypes.INSERT },
+          (err, result) => {
+            res.json(err);
+          }
+        );
+      }
+    } else if (!isValidTime) {
+      res.json({
+        errorMessage:
+          "Current selected start and end time do not respect currently selected users preferences. Click find availabilty button to see preferences and non-overlapping times to select from and try again.",
+      });
+    } else {
+      res.json({
+        errorMessage:
+          "Current selected start and end time are overlapping with other events. Click find availabilty button to see preferences and non-overlapping times to select from and try again.",
+      });
+    }
   }
 });
 

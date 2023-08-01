@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { WEATHER_API } from "src/api-key";
+import { Link } from "react-router-dom";
 
 EventSection.propTypes = {
   events: PropTypes.array.isRequired,
@@ -108,7 +109,7 @@ export default function EventSection(props) {
                       .toLocaleDateString("en-US", dateConversionConfig)
                       .replace(",", " -")}
                   </p>
-                  <div className="moreDetails-btn-container">
+                  <div>
                     <button
                       className="moreDetails-btn"
                       onClick={() => {
@@ -116,8 +117,11 @@ export default function EventSection(props) {
                         buttonPressed(value.location);
                       }}
                     >
-                      More Details
+                      Weather Details
                     </button>
+                    <Link to={`/directions/${value.location}`}>
+                      <button className="moreDetails-btn">Navigation</button>
+                    </Link>
                   </div>
                 </div>
               );

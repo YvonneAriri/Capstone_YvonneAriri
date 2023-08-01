@@ -74,7 +74,7 @@ h1 {
   align-items: center;
 }
 
-.edit-logout-btn {
+.edit-btn {
   height: 2.5rem;
   width: 8rem;
   margin-top: 1em;
@@ -87,6 +87,10 @@ h1 {
   margin-top: 40px;
   margin-left: 2px;
 }
+.edit-btn:disabled {
+  background-color: grey;
+}
+
 hr {
   border-top: 0.1px solid #8c8b8b;
   margin: 10px 30px 10px 30px;
