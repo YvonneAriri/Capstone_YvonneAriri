@@ -22,6 +22,7 @@ export default function Popup(props) {
   const [gaps, setGaps] = useState([]);
   const [error, setError] = useState();
   const [isChecked, setIsChecked] = useState(false);
+  const [userPreference, setUserPreference] = useState(null);
 
   const dateConversionConfig = {
     year: "2-digit",
@@ -54,8 +55,13 @@ export default function Popup(props) {
     }
   };
 
-  const findGaps = async (e) => {
+  useEffect(() => {
+    setError("");
+  }, [startTime, endTime]);
+
+  const findAvailability = async (e) => {
     e.preventDefault();
+    setError("");
     try {
       //creates an array of the selected users and also includes the current user to find the gaps between them
       const participants = [
@@ -63,7 +69,7 @@ export default function Popup(props) {
         username,
       ];
       //Serialize the 'params' object into a URL-encoded string with array values represented in square brackets format. This prepares the 'params' object for use in query parameters of a URL.
-      const result = await axios.get("http://localhost:3000/find_gaps", {
+      const result = await axios.get("http://localhost:3000/find_availabilty", {
         params: {
           selectedUsers: participants,
         },
@@ -86,6 +92,7 @@ export default function Popup(props) {
           return label;
         })
       );
+      setUserPreference(result.data.userPreferredTimes);
     } catch (err) {
       console.error("error fetching data", err.message);
     }
@@ -199,11 +206,21 @@ export default function Popup(props) {
                 labelledBy="Select"
               />
             )}
-            {/* suggest times when both the user and the participants are free */}
+            {/* Show start and end time that works for all users if there are some selected participants. We do not repect our own preferences if event is just for us */}
+            {userPreference && selectedUsers.length ? (
+              <>
+                This is the start and end time that works for all selected users
+                on any day based on their preferences:
+                <ul>
+                  <li>{userPreference.starttime}</li>
+                  <li>{userPreference.endtime}</li>
+                </ul>
+              </>
+            ) : null}
             {gaps.length ? (
               <>
-                Pick a time between these ranges where all selected participants
-                are available:
+                These are the dates and times where all selected users do not
+                have any events:
                 <ul>
                   {gaps.map((gap, index) => {
                     return <li key={index}>{gap}</li>;
@@ -221,8 +238,8 @@ export default function Popup(props) {
             >
               Create Event
             </button>
-            <button className="edit-btn" onClick={findGaps}>
-              Find Gaps
+            <button className="edit-btn" onClick={findAvailability}>
+              Find Availability
             </button>
           </form>
         </div>

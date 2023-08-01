@@ -1,0 +1,12 @@
+.logo {
+  width: 13rem; /* Set the desired width for the icon */
+  height: 4rem; /* Set the desired height for the icon */
+  display: flex; /* Ensures the image occupies only the necessary space */
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.codelogo {
+  display: flex;
+  flex-direction: column;
+}

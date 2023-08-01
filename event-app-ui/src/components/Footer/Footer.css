@@ -1,0 +1,90 @@
+#contact-us {
+  align-items: center;
+  text-align: left;
+  background-color: white;
+  margin-top: 19rem;
+  color: black;
+  padding-left: 2rem;
+  justify-content: space-between;
+  display: flex;
+  border-radius: 1rem;
+  font-family: cursive;
+
+  flex-direction: row;
+  box-shadow: rgba(50, 50, 93, 0.25) 0 2rem 4rem -1rem inset,
+    rgba(0, 0, 0, 0.3) 0 1rem 2rem -1rem inset;
+}
+.socials {
+  justify-content: left;
+  display: flex;
+  flex-direction: column;
+  color: black;
+}
+.social {
+  margin: 1rem;
+}
+
+.vision,
+.who-we-are {
+  flex: 1;
+}
+
+.vision {
+  flex: 1;
+  overflow: hidden;
+  transition: 0.5s ease;
+}
+
+#About-Us {
+  margin: 0 auto;
+  height: 38rem;
+  width: 90%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0 2rem 4rem -1rem inset,
+    rgba(0, 0, 0, 0.3) 3rem 11rem 31rem 3rem inset;
+  display: flex;
+  flex-direction: row;
+  border-radius: 4rem;
+  background-color: white;
+  color: black;
+  margin-top: 6rem;
+}
+
+.about {
+  font-weight: 900;
+  font-size: 1rem;
+  width: 100%;
+  padding: 0 3rem 0 3rem;
+  font-family: cursive;
+  display: flex;
+}
+
+.evprep {
+  padding: 0 5rem 0 5rem;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  font-family: cursive;
+
+  margin: 1rem;
+  width: 100%;
+}
+
+.banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+@media screen and (max-width: 768px) {
+  .About-Us {
+    padding: 0;
+  }
+  .banner {
+    padding: 1rem;
+    flex-direction: column;
+  }
+  .vision {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+}
