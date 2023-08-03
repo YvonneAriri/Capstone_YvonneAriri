@@ -144,7 +144,6 @@ app.post("/login", async (req, res) => {
       //setting a cookie in the HTTP response that will be sent to the client browser
       res.cookie("access-token", accessToken, {
         //setting the maximum age of the cookie
-        maxAge: 60 * 60 * 24 * 30 * 1000,
         httpOnly: true,
         secure: true,
         sameSite: "strict",
@@ -166,6 +165,16 @@ app.get("/users", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+
+//sending a get request to retrieve an event with a specific id
+app.get("/find_event/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const event = await Event.findOne({
+    order: [["starttime", "ASC"]],
+    where: { id: id },
+  });
+  res.json(event);
 });
 
 //sending a get request to the events endpoint

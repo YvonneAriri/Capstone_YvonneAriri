@@ -1,11 +1,13 @@
 .event {
   flex-direction: column;
-  display: flex;
-  flex: 1;
+  display: grid;
+
   color: white;
-  margin: 1rem;
+  margin-left: 10px;
+  margin-right: 10px;
   word-wrap: break-word;
   font-size: 1.5em;
+
   margin-bottom: 0.6rem;
   padding: 3.4rem;
   background-color: #144272;
@@ -16,8 +18,9 @@
 }
 
 .event-view {
-  display: flex;
-  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 4px;
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 0;
@@ -55,6 +58,7 @@
   border: solid white;
   min-width: 18.75rem;
 }
+
 .moreDetails-btn {
   height: 1.9rem;
   width: 100%;
@@ -66,4 +70,11 @@
   border-radius: 0.5rem;
   border-color: white;
   font-weight: 700;
+}
+
+.weather-info {
+  background-color: #b39999;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 12px;
 }

@@ -27,4 +27,12 @@ export const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  preferredstarttime: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  preferredendtime: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
