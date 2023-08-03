@@ -93,6 +93,7 @@ export default function LoginForm() {
               </p>
             </div>
           </form>
+
         </div>
       </div>
     </section>

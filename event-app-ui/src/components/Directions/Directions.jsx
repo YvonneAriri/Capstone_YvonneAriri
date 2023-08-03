@@ -196,10 +196,12 @@ export default function Directions() {
 
   // Integrated geolocation to get the users current browser location
   useEffect(() => {
+
     const watchId = navigator.geolocation.watchPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
         setCenter({ lat: latitude, lng: longitude });
+
 
         try {
           const response = await fetch(
