@@ -5,6 +5,11 @@ import { useState, useEffect } from "react";
 import LocationSearchInput from "components/LocationSearchInput/LocationSearchInput";
 import { MultiSelect } from "react-multi-select-component";
 import qs from "qs";
+import {
+  EVENT_POPUP_ENDPOINT_URL,
+  FIND_AVAILABILITY_ENDPOINT_URL,
+  USERS_ENDPOINT_URL,
+} from "src/api-key";
 
 Popup.propTypes = {
   setIsOpen: PropTypes.func.isRequired,
@@ -36,7 +41,7 @@ export default function Popup(props) {
   const { username, setIsOpen } = props;
 
   const eventInput = async (e) => {
-    const response = await axios.post(`http://localhost:3000/event_popup`, {
+    const response = await axios.post(`${EVENT_POPUP_ENDPOINT_URL}`, {
       eventName: eventName,
       description: description,
       location: location,
@@ -69,7 +74,7 @@ export default function Popup(props) {
         username,
       ];
       //Serialize the 'params' object into a URL-encoded string with array values represented in square brackets format. This prepares the 'params' object for use in query parameters of a URL.
-      const result = await axios.get("http://localhost:3000/find_availabilty", {
+      const result = await axios.get(`${FIND_AVAILABILITY_ENDPOINT_URL}`, {
         params: {
           selectedUsers: participants,
         },
@@ -105,7 +110,7 @@ export default function Popup(props) {
   useEffect(() => {
     async function getUsers() {
       try {
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get(`${USERS_ENDPOINT_URL}`);
         setUsers(
           response.data.map((data) => {
             return {

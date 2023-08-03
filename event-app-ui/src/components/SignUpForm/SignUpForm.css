@@ -32,6 +32,17 @@ form {
 }
 form .input-box {
   height: 2.8rem;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  margin-top: 1em;
+  border: none;
+  margin-bottom: 1em;
+  border-bottom: 0.1rem solid white;
+}
+.button {
+  height: 2.8rem;
   width: 100%;
   margin-top: 1em;
   border: none;
@@ -41,7 +52,10 @@ form .input-box {
 .input-box input {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   border: none;
+
   background: transparent;
   color: white;
   padding: 0.6rem 0 2.5rem 0;
@@ -49,6 +63,7 @@ form .input-box {
 }
 .input-box button {
   height: 100%;
+  text-align: center;
   width: 100%;
   border: none;
   font-size: large;
@@ -61,4 +76,17 @@ form .input-box {
 input::placeholder {
   color: white;
   font-size: medium;
+}
+.phone {
+  width: 100%;
+  height: 36px; /* Adjust the height to match the regular input height */
+  font-size: 14px; /* Set the font size to match the regular input font size */
+  padding: 8px; /* Adjust padding to match the regular input */
+
+  border-radius: 4px;
+}
+.icon {
+  display: flex;
+  color: white;
+  flex-direction: column;
 }

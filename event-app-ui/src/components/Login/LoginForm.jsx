@@ -2,11 +2,14 @@ import "components/Login/LoginForm.css";
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { LOGIN_ENDPOINT_URL } from "src/api-key";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [type, setType] = useState("password");
 
   const navigate = useNavigate();
   const isDisabled = username === "" || password === "";
@@ -17,7 +20,7 @@ export default function LoginForm() {
   const logIn = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/login", {
+      .post(`${LOGIN_ENDPOINT_URL}`, {
         username: username,
         password: password,
       })
@@ -54,18 +57,26 @@ export default function LoginForm() {
               />
             </div>
 
-            <div className="input-field">
+            <div className="input-box">
               <input
                 autoComplete="off"
-                type="password"
+                type={type}
                 id="password"
-                value={password}
                 onChange={(e) => {
-                  setPassword(e.target.value);
+                  setPassword(e.target.value.trim());
                 }}
                 placeholder="Password"
                 required
               />
+              {type === "password" ? (
+                <span className="icon" onClick={() => setType("text")}>
+                  <FaEyeSlash />
+                </span>
+              ) : (
+                <span className="icon" onClick={() => setType("password")}>
+                  <FaEye />
+                </span>
+              )}
             </div>
             <div className="error">{error}</div>
             <div>

@@ -1,7 +1,10 @@
 import "components/SignUpForm/SignUpForm.css";
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { SIGNUP_ENDPOINT_URL } from "src/api-key";
 
 export default function SignUpForm() {
   const [fullname, setFullName] = useState("");
@@ -9,18 +12,22 @@ export default function SignUpForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
+  const [type, setType] = useState("password");
 
+  const navigate = useNavigate();
   //making a POST request to the endpoint to send data as the reuest payloads
   const register = (e) => {
     e.preventDefault();
 
-    axios.post(`http://localhost:3000/signUp`, {
+    axios.post(`${SIGNUP_ENDPOINT_URL}`, {
       fullname: fullname,
       username: username,
       password: password,
       email: email,
       tel: tel,
     });
+
+    navigate(`/login`);
   };
 
   const isDisabled =
@@ -65,7 +72,7 @@ export default function SignUpForm() {
             <div className="input-box">
               <input
                 autoComplete="off"
-                type="password"
+                type={type}
                 id="password"
                 onChange={(e) => {
                   setPassword(e.target.value.trim());
@@ -73,6 +80,15 @@ export default function SignUpForm() {
                 placeholder="Password"
                 required
               />
+              {type === "password" ? (
+                <span className="icon" onClick={() => setType("text")}>
+                  <FaEyeSlash />
+                </span>
+              ) : (
+                <span className="icon" onClick={() => setType("password")}>
+                  <FaEye />
+                </span>
+              )}
             </div>
 
             <div className="input-box">
@@ -87,25 +103,19 @@ export default function SignUpForm() {
                 required
               />
             </div>
-
             <div className="input-box">
-              <input
-                autoComplete="off"
-                type="tel"
-                id="Tel"
-                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                onChange={(e) => {
-                  setTel(e.target.value.trim());
-                }}
-                placeholder="Tel"
-                required
+              <PhoneInput
+                placeholder="Phone number"
+                value={tel}
+                onChange={setTel}
+                disableAreaCodes={true}
               />
             </div>
 
             <div>
               <button
                 disabled={isDisabled}
-                className="input-box"
+                className="button"
                 onClick={register}
               >
                 SignUp

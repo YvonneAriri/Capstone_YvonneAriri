@@ -1,4 +1,4 @@
-.input {
+.navigation-details {
   position: fixed;
   z-index: 0;
   align-items: center;
@@ -21,4 +21,32 @@ button {
   padding: 0.5rem;
   margin: 0.5rem;
   border-radius: 1rem;
+}
+
+.navigation-details > p {
+  margin-bottom: 7px;
+}
+
+span.section {
+  background-color: #00aada;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 5px;
+}
+
+span.section.alert {
+  background-color: red;
+}
+
+.moreDetails-btn {
+  height: 1.9rem;
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  background-color: #00aada;
+  vertical-align: bottom;
+  color: white;
+  border-radius: 0.5rem;
+  border-color: white;
+  font-weight: 700;
 }
