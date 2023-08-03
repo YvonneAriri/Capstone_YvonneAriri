@@ -5,7 +5,7 @@
   margin: 0;
   color: white;
   height: 30rem;
-  width: 30rem;
+  width: 20rem;
   background: transparent;
   border: solid rgba(255, 255, 255, 0.5);
   border-radius: 1rem;
@@ -14,13 +14,15 @@
 }
 .listOfEvents {
   display: flex;
+
   flex-direction: column;
+
   margin-left: 2rem;
   color: white;
-  width: 100%;
+
   background-color: #111;
   opacity: 0.9;
-  align-items: center;
+
   border: solid rgba(255, 255, 255, 0.5);
   border-radius: 2rem;
   backdrop-filter: blur(10rem);
@@ -31,6 +33,7 @@
   flex-direction: row;
   margin: 1rem;
 }
+
 .plus-btn {
   flex-direction: column;
   align-items: end;
@@ -94,4 +97,7 @@ h1 {
 hr {
   border-top: 0.1px solid #8c8b8b;
   margin: 10px 30px 10px 30px;
+}
+.isLoading {
+  text-align: center;
 }

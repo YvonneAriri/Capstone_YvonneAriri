@@ -2,6 +2,8 @@ import "components/EditProfile/EditProfile.css";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useState } from "react";
+import { EDIT_PROFILE_ENDPOINT_URL } from "src/api-key";
+import PhoneInput from "react-phone-input-2";
 
 EditProfile.propTypes = {
   setOpenProfile: PropTypes.func.isRequired,
@@ -20,7 +22,7 @@ export default function EditProfile(props) {
   const [preferredEndTime, setPreferredEndTime] = useState("");
 
   const editProfile = () => {
-    axios.post(`http://localhost:3000/editProfile`, {
+    axios.post(`${EDIT_PROFILE_ENDPOINT_URL}`, {
       username: username,
       fullname: newFullname,
       email: newEmail,
@@ -34,23 +36,13 @@ export default function EditProfile(props) {
     newEmail === "" ||
     (newTel === "" && preferredStartTime === "" && preferredEndTime === "");
 
-  function timeToEpoch(timeString) {
-    const [hours, minutes, seconds] = timeString.split(":");
-    const dateObj = new Date();
-    dateObj.setUTCHours(parseInt(hours, 10));
-    dateObj.setUTCMinutes(parseInt(minutes, 10));
-    dateObj.setUTCSeconds(seconds ? parseInt(seconds, 10) : 0);
-    return dateObj.getTime() / 1000; // Divide by 1000 to get seconds instead of milliseconds
-  }
   const handleStartChange = (e) => {
     setPreferredStartTime(e.target.value.trim());
   };
   const handleEndChange = (e) => {
     setPreferredEndTime(e.target.value.trim());
   };
-  const timeString = "23:41:00";
-  const epochTime = timeToEpoch(timeString);
-  console.log(epochTime); // Output: 1674465660
+
   return (
     <>
       <button className="close-btn" onClick={() => setOpenProfile(false)}>
@@ -76,17 +68,14 @@ export default function EditProfile(props) {
             setNewEmail(e.target.value.trim());
           }}
         />
-
-        <input
+        <PhoneInput
           className="edit-input"
-          type="tel"
+          placeholder="Phone number"
           value={newTel}
-          placeholder="Tel"
-          onChange={(e) => {
-            setNewTel(e.target.value.trim());
-          }}
+          onChange={setNewTel}
+          disableAreaCodes={true}
         />
-        <label htmlFor="timeInput">Enter Time (HH:mm:ss):</label>
+
         <input
           className="edit-input"
           type="Time"
@@ -95,7 +84,7 @@ export default function EditProfile(props) {
           placeholder="minStartTime"
           onChange={handleStartChange}
         />
-        <label htmlFor="timeInput">Enter Time (HH:mm:ss):</label>
+
         <input
           className="edit-input"
           type="Time"

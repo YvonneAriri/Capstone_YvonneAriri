@@ -1,15 +1,16 @@
 import pkg from "jsonwebtoken";
 
 const { sign, verify } = pkg;
+const secretKey = `${process.env.SECRET_KEY}`;
 export const createTokens = (result) => {
   //generates an access token using the jsonwebtoken library
   const accessToken = sign(
-    { username: result.username, id: result.id },
+    { username: result.username },
     // secret key to sign the token
-    "ukpkitexmd",
+    secretKey,
     {
-      issuer: "http://localhost:3000",
-      expiresIn: "30m",
+      issuer: `${process.env.URL}`,
+      expiresIn: "30d",
     }
   );
   return accessToken;
@@ -22,7 +23,7 @@ export const validateToken = (req, res, next) => {
     return res.status(400).json({ error: "User not Authenticated!" });
   }
   try {
-    const validToken = verify(accessToken, "ukpkitexmd");
+    const validToken = verify(accessToken, secretKey);
     if (validToken) {
       req.authenticated = true;
       //   move foward with the request

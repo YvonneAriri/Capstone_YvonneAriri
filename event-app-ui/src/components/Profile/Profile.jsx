@@ -6,9 +6,16 @@ import Popup from "components/Popup/Popup";
 import Navbar from "components/Navbar/Navbar";
 import EditProfile from "components/EditProfile/EditProfile";
 import EventSection from "components/EventSection/EventSection";
+import {
+  PROFILE_ENDPOINT_URL,
+  LOGOUT_ENDPOINT_URL,
+  EVENTS_ENDPOINT_URL,
+} from "src/api-key";
 
 export default function Profile() {
   // assign the extracted value 'username' to id
+  const [isUserProfileLoading, setIsUserProfileLoading] = useState(true);
+  const [isEventsLoading, setIsEventsLoading] = useState(true);
   const { username: id } = useParams();
 
   const [username, setUsername] = useState("");
@@ -31,14 +38,16 @@ export default function Profile() {
   useEffect(() => {
     async function getProfileInfo() {
       try {
-        const response = await axios.get(`http://localhost:3000/profile/${id}`);
+        const response = await axios.get(`${PROFILE_ENDPOINT_URL}/${id}`);
         const { username: user, fullname, email, tel } = response.data;
 
         setUsername(user);
         setFullname(fullname);
         setEmail(email);
         setTel(tel);
+        setIsUserProfileLoading(false);
       } catch (err) {
+        setIsUserProfileLoading(false);
         navigate("/login");
       }
     }
@@ -48,7 +57,7 @@ export default function Profile() {
   //once the logout button is clicked it redirects the person to the login page
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:3000/logout");
+      await axios.get(`${LOGOUT_ENDPOINT_URL}`);
     } finally {
       navigate("/login");
     }
@@ -56,15 +65,21 @@ export default function Profile() {
 
   //fetches the event data and update the eventData state with the received data
   useEffect(() => {
-    axios.get(`http://localhost:3000/events/${id}`).then((res) => {
-      setOnGoingEvents(res.data.onGoingEvents);
-      setFutureEvents(res.data.futureEvents);
-      setPastEvents(res.data.pastEvents);
-    });
+    axios
+      .get(`${EVENTS_ENDPOINT_URL}/${id}`)
+      .then((res) => {
+        setOnGoingEvents(res.data.onGoingEvents);
+        setFutureEvents(res.data.futureEvents);
+        setPastEvents(res.data.pastEvents);
+        setIsEventsLoading(false);
+      })
+      .finally(() => {
+        setIsEventsLoading(false);
+      });
   }, [id]);
 
   return (
-    <div>
+    <div className="profile-info">
       <Navbar />
 
       {/* sending setIsOpen as props popup */}
@@ -73,9 +88,9 @@ export default function Profile() {
       <div className="profile">
         <div className="profile-container">
           <h2 className="user-profile">User Profile</h2>
-          <div className="user"></div>
-
-          {openProfile ? (
+          {isUserProfileLoading ? (
+            <h2 className="isLoading">Loading......</h2>
+          ) : openProfile ? (
             <EditProfile
               setOpenProfile={setOpenProfile}
               fullname={fullname}
@@ -110,42 +125,42 @@ export default function Profile() {
           )}
         </div>
         <div className="listOfEvents">
-          <div>
-            <div className="add-btn">
-              <button
-                className="plus-btn"
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-              >
-                +
-              </button>
-            </div>
-            {isOpen ? (
-              <Popup setIsOpen={setIsOpen} username={username} />
-            ) : (
-              <>
-                <EventSection
-                  events={onGoingEvents}
-                  sectionTitle="Ongoing events"
-                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
-                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
-                />
-                <EventSection
-                  events={futureEvents}
-                  sectionTitle="Future events"
-                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
-                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
-                />
-                <EventSection
-                  events={pastEvents}
-                  sectionTitle="Past events"
-                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
-                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
-                />
-              </>
-            )}
+          <div className="add-btn">
+            <button
+              className="plus-btn"
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              +
+            </button>
           </div>
+          {isEventsLoading ? (
+            <h2 className="isLoading">Loading.....</h2>
+          ) : isOpen ? (
+            <Popup setIsOpen={setIsOpen} username={username} />
+          ) : (
+            <>
+              <EventSection
+                events={onGoingEvents}
+                sectionTitle="Ongoing events"
+                isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+              />
+              <EventSection
+                events={futureEvents}
+                sectionTitle="Future events"
+                isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+              />
+              <EventSection
+                events={pastEvents}
+                sectionTitle="Past events"
+                isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

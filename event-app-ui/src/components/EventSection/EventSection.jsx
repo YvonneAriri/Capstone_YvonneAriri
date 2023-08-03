@@ -8,18 +8,12 @@ import { Link } from "react-router-dom";
 EventSection.propTypes = {
   events: PropTypes.array.isRequired,
   sectionTitle: PropTypes.string.isRequired,
-  isEventWeatherDetailOpen: PropTypes.bool.isRequired,
-  setIsEventWeatherDetailOpen: PropTypes.func.isRequired,
 };
 
 export default function EventSection(props) {
-  const {
-    events,
-    sectionTitle,
-    isEventWeatherDetailOpen,
-    setIsEventWeatherDetailOpen,
-  } = props;
+  const { events, sectionTitle } = props;
   const [weatherInfo, setWeatherInfo] = useState({});
+  const [hoveredItem, setHoveredItem] = useState(null);
 
   const dateConversionConfig = {
     year: "2-digit",
@@ -29,9 +23,11 @@ export default function EventSection(props) {
     minute: "numeric",
     hour12: true,
   };
-  //uses the geocodeByAddress and getLatLng to convert the address name to coordinates (latittude and longitude)
-  const buttonPressed = async (address) => {
+
+  //created a function that once an event is hovered upon it shows the weather details
+  const eventHovered = async (address, id) => {
     try {
+      //uses the geocodeByAddress and getLatLng to convert the address name to coordinates (latittude and longitude)
       const results = await geocodeByAddress(address);
 
       const weather = await getLatLng(results[0]);
@@ -40,63 +36,52 @@ export default function EventSection(props) {
       );
       const data = await response.json();
       setWeatherInfo(data);
+      setHoveredItem(id);
     } catch (error) {
       console.error("Error", error);
     }
   };
 
-  const toggleModal = () => {
-    setIsEventWeatherDetailOpen((prevValue) => !prevValue);
-  };
-
-  if (
-    !events ||
-    events.length === 0 ||
-    (isEventWeatherDetailOpen && !Object.keys(weatherInfo).length)
-  ) {
+  if (!events || events.length === 0) {
     return null;
   }
 
   return (
     <>
-      {isEventWeatherDetailOpen ? (
-        <div className="modal">
-          <div className="overlay">
-            <div className="modal-content">
-              <button
-                className="close-btn"
-                onClick={() => {
-                  if (Object.keys(weatherInfo).length) {
-                    setWeatherInfo({});
-                  }
-                  toggleModal();
-                }}
-              >
-                X
-              </button>
-              <div>
-                <p>{weatherInfo.name}</p>
-                <p>{weatherInfo.weather?.[0]?.description}</p>
-              </div>
-              <div>
-                <h3>Temperature:</h3>
-                <p>{weatherInfo.main?.temp}&deg;F</p>
-              </div>
-              <div>
-                <p>{weatherInfo.weather?.[0]?.main}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <h2 className="event-section-title">{sectionTitle}</h2>
+      <h2 className="event-section-title">{sectionTitle}</h2>
 
-          <div className="event-view">
-            {events.map((value, key) => {
-              return (
-                <div key={key} className="event">
-                  <h2> {value.eventname}</h2>
+      <div className="event-view">
+        {events.map((value, key) => {
+          return (
+            <div
+              key={key}
+              className="event"
+              onMouseEnter={() => eventHovered(value.location, value.id)}
+              onMouseLeave={() => {
+                setHoveredItem(null);
+                if (Object.keys(weatherInfo).length) {
+                  setWeatherInfo({});
+                }
+              }}
+            >
+              <h2> {value.eventname}</h2>
+              {hoveredItem === value.id ? (
+                <div className="weather-info">
+                  <p>{weatherInfo.name}</p>
+                  <p>
+                    <img
+                      src={`http://openweathermap.org/img/w/${weatherInfo.weather?.[0]?.icon}.png`}
+                      height={40}
+                      width={40}
+                    />
+                    {weatherInfo.weather?.[0]?.description}
+                  </p>
+                  <p>{weatherInfo.main?.temp}&deg;C</p>
+                  <p>{weatherInfo.weather?.[0]?.main}</p>
+                </div>
+              ) : (
+                <>
+                  {" "}
                   <p> {value.description}</p>
                   <p>{value.location}</p>
                   <p>
@@ -109,26 +94,15 @@ export default function EventSection(props) {
                       .toLocaleDateString("en-US", dateConversionConfig)
                       .replace(",", " -")}
                   </p>
-                  <div>
-                    <button
-                      className="moreDetails-btn"
-                      onClick={() => {
-                        toggleModal();
-                        buttonPressed(value.location);
-                      }}
-                    >
-                      Weather Details
-                    </button>
-                    <Link to={`/directions/${value.location}`}>
-                      <button className="moreDetails-btn">Navigation</button>
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
+                </>
+              )}
+              <Link to={`/directions/${value.id}`}>
+                <button className="moreDetails-btn">Navigation</button>
+              </Link>
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 }
