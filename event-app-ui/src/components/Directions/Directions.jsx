@@ -94,14 +94,14 @@ export default function Directions(props) {
           const results = await geocodeByAddress(result.data.location);
 
           //gets the latitude and longitude coordinates
-          const forcast = await getLatLng(results[0]);
+          const { lat, lng } = await getLatLng(results[0]);
           const response = await fetch(
-            `${FORCAST_API.base}forecast?lat=${forcast.lat}&lon=${forcast.lng}&appid=${WEATHER_API.key}`
+            `${FORCAST_API.base}forecast?lat=${lat}&lon=${lng}&appid=${WEATHER_API.key}`
           );
           const data = await response.json();
 
           //iterate through every data in the data list to get the dt which is the date and time in epoch format
-          //and gets the days by finding the difference between the start time and end time in seconds
+          //and gets the hours by finding the difference between the start time and end time in seconds
           data.list.every((info) => {
             const hoursFromNowTillEvent = Math.floor(
               secondsBetweenEpochs(info.dt, result.data.starttime) /
