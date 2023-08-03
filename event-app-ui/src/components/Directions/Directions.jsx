@@ -1,16 +1,10 @@
 import "components/Directions/Directions.css";
-import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "components/Navbar/Navbar";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import axios from "axios";
-import {
-  useJsApiLoader,
-  GoogleMap,
-  Marker,
-  DirectionsRenderer,
-} from "@react-google-maps/api";
+import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
 import {
   FaBicycle,
   FaWalking,
@@ -37,16 +31,12 @@ const DATE_CONVERSION_CONFIG = {
   hour12: true,
 };
 
-Directions.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  setIsFetching: PropTypes.func.isRequired,
-};
-
 const SECONDS_IN_A_DAY = 86400;
 const SECONDS_IN_AN_HOUR = 3600;
 
-export default function Directions(props) {
-  const { isFetching, setIsFetching } = props;
+export default function Directions() {
+  const [isRouteLoading, setIsRouteLoading] = useState(true);
+  const [isForecastLoading, setIsForecastLoading] = useState(true);
   const [map, setMap] = useState(/** @type google.maps.Map */ (null));
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState("");
@@ -60,10 +50,6 @@ export default function Directions(props) {
   const [latestDeparture, setLatestDeparture] = useState(null);
   const [mode, setMode] = useState("");
   const { id } = useParams();
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: API_KEY,
-  });
 
   //function that will calculate the difference between the event's start time and the current Date in seconds
   const secondsBetweenEpochs = (firstEpoch, secondEpoch) => {
@@ -102,7 +88,7 @@ export default function Directions(props) {
 
           //iterate through every data in the data list to get the dt which is the date and time in epoch format
           //and gets the hours by finding the difference between the start time and end time in seconds
-          data.list.every((info) => {
+          for (let info of data.list) {
             const hoursFromNowTillEvent = Math.floor(
               secondsBetweenEpochs(info.dt, result.data.starttime) /
                 SECONDS_IN_AN_HOUR
@@ -114,12 +100,14 @@ export default function Directions(props) {
               hoursFromNowTillEvent === 5
             ) {
               setWeatherInfo(info);
-              return false;
+              break;
             }
-          });
+          }
         }
       } catch (error) {
         console.error("Error", error);
+      } finally {
+        setIsForecastLoading(false);
       }
     };
     fetchData();
@@ -129,6 +117,7 @@ export default function Directions(props) {
   // calculate the route from the user's location to the event's location
   async function calculateRoute(mode) {
     if (currentAddress === "" || destination === "") {
+      setIsRouteLoading(false);
       return;
     }
 
@@ -144,7 +133,7 @@ export default function Directions(props) {
     setDirectionsResponse(results);
     setDistance(results.routes[0].legs[0].distance.text);
     setDuration(results.routes[0].legs[0].duration.text);
-    setIsFetching(false);
+    setIsRouteLoading(false);
 
     //calculates the difference between the start time and duration in second to get the travel time
     const durationInSeconds = results.routes[0].legs[0].duration.value;
@@ -165,7 +154,7 @@ export default function Directions(props) {
           const windSpeed = weatherInfo?.wind?.speed;
 
           const isRaining = percipitation > maxPercipitation;
-          const isWindy = windSpeed > maxWindSpeed;
+          const isWindy = windSpeed < maxWindSpeed;
 
           //displays an alert that shows details on why the departure time has been pushed back 3 hours
           if (isRaining) {
@@ -243,9 +232,6 @@ export default function Directions(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress, destination]);
-  if (!isLoaded) {
-    return <div className="loading">Loading.....</div>;
-  }
 
   return (
     <>
@@ -271,11 +257,10 @@ export default function Directions(props) {
           onLoad={(map) => setMap(map)}
         >
           <div className="navigation-details">
-            {isFetching ? (
+            {isRouteLoading || isForecastLoading ? (
               <h1>Loading...</h1>
             ) : (
               <>
-                {" "}
                 <p>
                   <span className="section">Origin</span>
                   {currentAddress}
@@ -305,24 +290,25 @@ export default function Directions(props) {
                     {weatherNotice.icon} {weatherNotice.detail}
                   </p>
                 )}
+                <button onClick={() => map.panTo(center)}>
+                  <FaTelegramPlane />
+                </button>
+                <button onClick={() => calculateRoute("DRIVING")}>
+                  <FaCar />
+                </button>
+                <button onClick={() => calculateRoute("TRANSIT")}>
+                  <FaBus />
+                </button>
+                <button onClick={() => calculateRoute("BICYCLING")}>
+                  <FaBicycle />
+                </button>
+                <button onClick={() => calculateRoute("WALKING")}>
+                  <FaWalking />
+                </button>
               </>
             )}
-            <button onClick={() => map.panTo(center)}>
-              <FaTelegramPlane />
-            </button>
-            <button onClick={() => calculateRoute("DRIVING")}>
-              <FaCar />
-            </button>
-            <button onClick={() => calculateRoute("TRANSIT")}>
-              <FaBus />
-            </button>
-            <button onClick={() => calculateRoute("BICYCLING")}>
-              <FaBicycle />
-            </button>
-            <button onClick={() => calculateRoute("WALKING")}>
-              <FaWalking />
-            </button>
           </div>
+
           <Marker position={center} />
           {directionsResponse && (
             <DirectionsRenderer directions={directionsResponse} />

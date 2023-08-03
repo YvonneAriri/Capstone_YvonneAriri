@@ -5,7 +5,6 @@ import axios from "axios";
 import Popup from "components/Popup/Popup";
 import Navbar from "components/Navbar/Navbar";
 import EditProfile from "components/EditProfile/EditProfile";
-import PropTypes from "prop-types";
 import EventSection from "components/EventSection/EventSection";
 import {
   PROFILE_ENDPOINT_URL,
@@ -13,14 +12,10 @@ import {
   EVENTS_ENDPOINT_URL,
 } from "src/api-key";
 
-Profile.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  setIsFetching: PropTypes.func.isRequired,
-};
-
-export default function Profile(props) {
+export default function Profile() {
   // assign the extracted value 'username' to id
-  const { isFetching, setIsFetching } = props;
+  const [isUserProfileLoading, setIsUserProfileLoading] = useState(true);
+  const [isEventsLoading, setIsEventsLoading] = useState(true);
   const { username: id } = useParams();
 
   const [username, setUsername] = useState("");
@@ -48,15 +43,16 @@ export default function Profile(props) {
 
         setUsername(user);
         setFullname(fullname);
-        setIsFetching(false);
         setEmail(email);
         setTel(tel);
+        setIsUserProfileLoading(false);
       } catch (err) {
+        setIsUserProfileLoading(false);
         navigate("/login");
       }
     }
     getProfileInfo();
-  }, [id, navigate, setIsFetching]);
+  }, [id, navigate]);
 
   //once the logout button is clicked it redirects the person to the login page
   const handleLogout = async () => {
@@ -69,13 +65,18 @@ export default function Profile(props) {
 
   //fetches the event data and update the eventData state with the received data
   useEffect(() => {
-    axios.get(`${EVENTS_ENDPOINT_URL}/${id}`).then((res) => {
-      setIsFetching(false);
-      setOnGoingEvents(res.data.onGoingEvents);
-      setFutureEvents(res.data.futureEvents);
-      setPastEvents(res.data.pastEvents);
-    });
-  }, [id, setIsFetching]);
+    axios
+      .get(`${EVENTS_ENDPOINT_URL}/${id}`)
+      .then((res) => {
+        setOnGoingEvents(res.data.onGoingEvents);
+        setFutureEvents(res.data.futureEvents);
+        setPastEvents(res.data.pastEvents);
+        setIsEventsLoading(false);
+      })
+      .finally(() => {
+        setIsEventsLoading(false);
+      });
+  }, [id]);
 
   return (
     <div className="profile-info">
@@ -87,7 +88,7 @@ export default function Profile(props) {
       <div className="profile">
         <div className="profile-container">
           <h2 className="user-profile">User Profile</h2>
-          {isFetching ? (
+          {isUserProfileLoading ? (
             <h2 className="isLoading">Loading......</h2>
           ) : openProfile ? (
             <EditProfile
@@ -134,7 +135,7 @@ export default function Profile(props) {
               +
             </button>
           </div>
-          {isFetching ? (
+          {isEventsLoading ? (
             <h2 className="isLoading">Loading.....</h2>
           ) : isOpen ? (
             <Popup setIsOpen={setIsOpen} username={username} />
