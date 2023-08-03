@@ -38,9 +38,33 @@ export default function Popup(props) {
     hour12: true,
   };
 
+  const minimumDate = (function () {
+    const padWithZero = (number) => {
+      if (number < 10) {
+        return "0" + number;
+      }
+      return number;
+    };
+
+    const today = new Date();
+
+    return (
+      today.getFullYear() +
+      "-" +
+      padWithZero(today.getMonth() + 1) +
+      "-" +
+      padWithZero(today.getDate()) +
+      "T" +
+      padWithZero(today.getHours()) +
+      ":" +
+      padWithZero(today.getMinutes())
+    );
+  })();
+
   const { username, setIsOpen } = props;
 
   const eventInput = async (e) => {
+    e.preventDefault();
     const response = await axios.post(`${EVENT_POPUP_ENDPOINT_URL}`, {
       eventName: eventName,
       description: description,
@@ -158,7 +182,7 @@ export default function Popup(props) {
             <input
               className="eventInput"
               autoComplete="off"
-              min={new Date().toISOString().slice(0, -8)}
+              min={minimumDate}
               type="datetime-local"
               id="inputCreateEvent"
               placeholder="Start time"
@@ -170,7 +194,7 @@ export default function Popup(props) {
             <input
               className="eventInput"
               autoComplete="off"
-              min={new Date().toISOString().slice(0, -8)}
+              min={minimumDate}
               id="inputCreateEvent"
               type="datetime-local"
               placeholder="End time"
