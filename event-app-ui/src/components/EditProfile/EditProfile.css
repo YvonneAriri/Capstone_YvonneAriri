@@ -10,12 +10,11 @@
   width: 100%;
   display: flex;
   background-color: white;
+  height: 15px;
   opacity: 0.8;
   color: black;
   padding: 1.4rem;
   border-radius: 0.4rem;
-
-  box-shadow: 0 0 0.6rem rgba(255, 255, 255, 1);
 }
 .edit-input::placeholder {
   color: black;
@@ -31,4 +30,15 @@
   border-radius: 0.5rem;
   border-color: white;
   font-weight: 700;
+}
+.edit-phonenumber-input {
+  max-width: 26.9rem;
+  width: 100%;
+  display: flex;
+  background-color: white;
+
+  opacity: 0.8;
+  color: black;
+  padding: 1.4rem;
+  border-radius: 0.4rem;
 }

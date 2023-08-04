@@ -1,41 +1,44 @@
 .profile-container {
   display: flex;
-  padding: 0;
   flex-direction: column;
   margin: 0;
   color: white;
   height: 30rem;
-  width: 20rem;
+  width: 30rem;
   background: transparent;
   border: solid rgba(255, 255, 255, 0.5);
   border-radius: 1rem;
   backdrop-filter: blur(10rem);
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
 }
-.listOfEvents {
+.list-of-event-container {
   display: flex;
-
   flex-direction: column;
-
-  margin-left: 2rem;
+  margin: 0;
   color: white;
-
   background-color: #111;
   opacity: 0.9;
-
   border: solid rgba(255, 255, 255, 0.5);
   border-radius: 2rem;
   backdrop-filter: blur(10rem);
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
 }
+
+.listOfEvents {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
 .profile {
   display: flex;
   flex-direction: row;
-  margin: 1rem;
+  width: 100%;
 }
-
-.plus-btn {
+.event-section {
+  display: flex;
   flex-direction: column;
+}
+.plus-btn {
   align-items: end;
   background-color: #144272;
   font-size: 2rem;
@@ -69,14 +72,20 @@ h1 {
 }
 .user-profile {
   text-align: center;
-  margin: 60px;
+  margin-top: 60px;
 }
 .edit-logout-btn-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
+.editProfile {
+  width: 100%;
+  height: 3rem;
+}
+.profileInfo {
+  margin-top: 60px;
+}
 .edit-btn {
   height: 2.5rem;
   width: 8rem;

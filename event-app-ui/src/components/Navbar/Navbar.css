@@ -55,6 +55,7 @@
   font-size: 1.9rem;
   color: white;
   float: right;
+  align-items: end;
   line-height: 5rem;
   display: none;
 }
@@ -69,4 +70,8 @@
   .menu {
     display: block;
   }
+}
+
+.navbar-item.show {
+  display: block;
 }

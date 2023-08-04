@@ -234,7 +234,7 @@ app.get("/logout", async (req, res) => {
 });
 
 //sending a get request to the find_gap endpoint
-app.get("/find_availabilty", async (req, res) => {
+app.get("/find_availability", async (req, res) => {
   const selectedUsers = req.query.selectedUsers.map((user) => {
     return {
       username: user,
