@@ -81,23 +81,22 @@ export default function Profile() {
   return (
     <div className="profile-info">
       <Navbar />
-
-      {/* sending setIsOpen as props popup */}
-
       <h1 className="greeting">Welcome Back {username}!</h1>
       <div className="profile">
         <div className="profile-container">
           <h2 className="user-profile">User Profile</h2>
           {isUserProfileLoading ? (
-            <h2 className="isLoading">Loading......</h2>
+            <h2 className="isLoading">Loading...</h2>
           ) : openProfile ? (
-            <EditProfile
-              setOpenProfile={setOpenProfile}
-              fullname={fullname}
-              email={email}
-              tel={tel}
-              username={username}
-            />
+            <div className="editProfile">
+              <EditProfile
+                setOpenProfile={setOpenProfile}
+                fullname={fullname}
+                email={email}
+                tel={tel}
+                username={username}
+              />
+            </div>
           ) : (
             <div className="profileInfo">
               <p className="profile-details">Username: {username}</p>
@@ -125,42 +124,44 @@ export default function Profile() {
           )}
         </div>
         <div className="listOfEvents">
-          <div className="add-btn">
-            <button
-              className="plus-btn"
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              +
-            </button>
+          <div className="list-of-event-container">
+            <div className="add-btn">
+              <button
+                className="plus-btn"
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                +
+              </button>
+            </div>
+            {isEventsLoading ? (
+              <h2 className="isLoading">Loading.....</h2>
+            ) : isOpen ? (
+              <Popup setIsOpen={setIsOpen} username={username} />
+            ) : (
+              <div className="event-section">
+                <EventSection
+                  events={onGoingEvents}
+                  sectionTitle="Ongoing events"
+                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+                />
+                <EventSection
+                  events={futureEvents}
+                  sectionTitle="Future events"
+                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+                />
+                <EventSection
+                  events={pastEvents}
+                  sectionTitle="Past events"
+                  isEventWeatherDetailOpen={isEventWeatherDetailOpen}
+                  setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
+                />
+              </div>
+            )}
           </div>
-          {isEventsLoading ? (
-            <h2 className="isLoading">Loading.....</h2>
-          ) : isOpen ? (
-            <Popup setIsOpen={setIsOpen} username={username} />
-          ) : (
-            <>
-              <EventSection
-                events={onGoingEvents}
-                sectionTitle="Ongoing events"
-                isEventWeatherDetailOpen={isEventWeatherDetailOpen}
-                setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
-              />
-              <EventSection
-                events={futureEvents}
-                sectionTitle="Future events"
-                isEventWeatherDetailOpen={isEventWeatherDetailOpen}
-                setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
-              />
-              <EventSection
-                events={pastEvents}
-                sectionTitle="Past events"
-                isEventWeatherDetailOpen={isEventWeatherDetailOpen}
-                setIsEventWeatherDetailOpen={setIsEventWeatherDetailOpen}
-              />
-            </>
-          )}
         </div>
       </div>
     </div>

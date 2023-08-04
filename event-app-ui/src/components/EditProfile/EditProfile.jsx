@@ -69,7 +69,7 @@ export default function EditProfile(props) {
           }}
         />
         <PhoneInput
-          className="edit-input"
+          className="edit-phonenumber-input"
           placeholder="Phone number"
           value={newTel}
           onChange={setNewTel}

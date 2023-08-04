@@ -45,6 +45,7 @@ export default function Directions() {
   const [currentAddress, setCurrentAddress] = useState("");
   const [weatherInfo, setWeatherInfo] = useState(null);
   const [weatherNotice, setWeatherNotice] = useState(null);
+  const [weatherForecastList, setWeatherForecastList] = useState(null);
   const [destination, setDestination] = useState("");
   const [startTime, setStartTime] = useState("");
   const [latestDeparture, setLatestDeparture] = useState(null);
@@ -85,7 +86,6 @@ export default function Directions() {
             `${FORCAST_API.base}forecast?lat=${lat}&lon=${lng}&appid=${WEATHER_API.key}`
           );
           const data = await response.json();
-
           //iterate through every data in the data list to get the dt which is the date and time in epoch format
           //and gets the hours by finding the difference between the start time and end time in seconds
           for (let info of data.list) {
@@ -94,11 +94,8 @@ export default function Directions() {
                 SECONDS_IN_AN_HOUR
             );
 
-            if (
-              hoursFromNowTillEvent === 3 ||
-              hoursFromNowTillEvent === 4 ||
-              hoursFromNowTillEvent === 5
-            ) {
+            if (hoursFromNowTillEvent <= 3) {
+              setWeatherForecastList(data.list);
               setWeatherInfo(info);
               break;
             }
@@ -150,17 +147,17 @@ export default function Directions() {
         const maxWindSpeed = 15;
 
         if (weatherInfo?.dt) {
-          const percipitation = weatherInfo?.rain?.["1h"] || 0;
+          const percipitation = weatherInfo?.rain?.["3h"] || 0;
           const windSpeed = weatherInfo?.wind?.speed;
 
           const isRaining = percipitation > maxPercipitation;
-          const isWindy = windSpeed < maxWindSpeed;
+          const isWindy = windSpeed > maxWindSpeed;
 
-          //displays an alert that shows details on why the departure time has been pushed back 3 hours
+          //displays an alert that shows details on why the departure time has been updated
           if (isRaining) {
             setWeatherNotice({
               icon: <FaCloudShowersHeavy />,
-              detail: `You have to leave 3+ hours earlier as it is forecasted to rain at event location by ${new Date(
+              detail: `Your depature time has been updated as it is forecasted to rain at event location by ${new Date(
                 startTime * 1000
               )
                 .toLocaleString("en-US", DATE_CONVERSION_CONFIG)
@@ -169,7 +166,7 @@ export default function Directions() {
           } else if (isWindy) {
             setWeatherNotice({
               icon: <FaWind />,
-              detail: `You have to leave 3+ hours earlier as it is forecasted to be windy at event location by ${new Date(
+              detail: `Your depature time has been updated as it is forecasted to be windy at event location by ${new Date(
                 startTime * 1000
               )
                 .toLocaleString("en-US", DATE_CONVERSION_CONFIG)
@@ -180,9 +177,26 @@ export default function Directions() {
           }
 
           const leaveEarly = isRaining || isWindy;
-          //Calculates the departure time based on whether it is windy or raining, by adjusting the departure time earlier by 3hours
+
+          // Calculates the departure time by finding the last time before event start time where the weather is neither windy nor rainy
+          const getBestTimeToDepart = () => {
+            for (let date of weatherForecastList) {
+              const isRainyOrWindy =
+                (date?.rain?.["3h"] || 0) > maxPercipitation ||
+                date?.wind?.speed > maxWindSpeed;
+              // If weather is good and forecast is for a time before event starts, set latest departure time, otherwise end iteration
+              if (!isRainyOrWindy && date.dt < startTime) {
+                return date.dt;
+              } else {
+                break;
+              }
+            }
+
+            return travelTimeInSeconds; // Return default time if we can not find best possible time to leave (i.e all available forecast before start time is rainy or windy)
+          };
+
           const departTime = leaveEarly
-            ? travelTimeInSeconds - 3 * 60 * 60
+            ? getBestTimeToDepart()
             : travelTimeInSeconds;
 
           const datetime = new Date(departTime * 1000)
@@ -196,12 +210,10 @@ export default function Directions() {
 
   // Integrated geolocation to get the users current browser location
   useEffect(() => {
-
     const watchId = navigator.geolocation.watchPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
         setCenter({ lat: latitude, lng: longitude });
-
 
         try {
           const response = await fetch(
